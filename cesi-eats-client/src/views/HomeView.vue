@@ -1,9 +1,7 @@
 <template>
-  <div>
+  <div id="home-view">
     <LeaderboardComponent/>
-    <div class="mr-2">
-      <RolesComponent/>
-    </div>
+    <RolesComponent/>
   </div>
 </template>
 

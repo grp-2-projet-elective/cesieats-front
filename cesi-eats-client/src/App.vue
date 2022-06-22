@@ -10,8 +10,8 @@
 
 <script lang="typescript">
 import Vue from 'vue'
-import NavbarComponent from '@/components/NavbarComponent'
-import FooterComponent from '@/components/FooterComponent'
+import NavbarComponent from '@/components/NavbarComponent.vue'
+import FooterComponent from '@/components/FooterComponent.vue'
 
 export default Vue.extend({
   name: 'App',
