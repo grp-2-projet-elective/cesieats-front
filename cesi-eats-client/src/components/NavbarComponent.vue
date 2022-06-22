@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar app id="navbar">
+  <v-app-bar app id="navbar-component">
     <v-btn text class="mr-4">
       <v-icon>mdi-menu</v-icon>
     </v-btn>
@@ -39,7 +39,7 @@ export default {
 </script>
 
 <style scoped>
-#navbar a {
+#navbar-component a {
   text-decoration: none;
 }
 </style>
