@@ -1,21 +1,24 @@
 <template>
   <v-app>
+    <MenuComponent/>
     <v-main>
-      <NavbarComponent/>
+      <NavbarComponent style="z-index: 10;"/>
       <router-view/>
     </v-main>
-    <FooterComponent/>
+    <FooterComponent style="z-index: 30;"/>
   </v-app>
 </template>
 
 <script lang="typescript">
 import Vue from 'vue'
+import MenuComponent from '@/components/MenuComponent.vue'
 import NavbarComponent from '@/components/NavbarComponent.vue'
 import FooterComponent from '@/components/FooterComponent.vue'
 
 export default Vue.extend({
   name: 'App',
   components: {
+    MenuComponent,
     NavbarComponent,
     FooterComponent
   },

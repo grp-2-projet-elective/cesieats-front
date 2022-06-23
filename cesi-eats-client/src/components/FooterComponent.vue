@@ -1,6 +1,6 @@
 <template>
   <v-footer padless id="footer-component" class="mt-3">
-    <v-card class="primary lighten-1 white--text text-center">
+    <v-card class="primary white--text text-center">
       <v-container>
         <v-row>
           <v-col id="logo" sm="12" md="6">
@@ -14,19 +14,19 @@
             </a>
           </v-col>
           <v-col id="links" sm="12" md="6">
-            <v-btn text href="/aide">
+            <v-btn link color="primary" :to="{ name: 'aide' }">
               <span class="mr-2">Obtenir de l'aide</span>
             </v-btn>
-            <v-btn text href="/client">
+            <v-btn link color="primary" :to="{ name: 'client' }">
               <span class="mr-2">Créer un compte</span>
             </v-btn>
-            <v-btn text href="/restaurateur">
+            <v-btn link color="primary" :to="{ name: 'restaurateur' }">
               <span class="mr-2">Ajouter un restaurant</span>
             </v-btn>
-            <v-btn text href="/livreur">
+            <v-btn link color="primary" :to="{ name: 'livreur' }">
               <span class="mr-2">Devenez coursier-partenaire</span>
             </v-btn>
-            <v-btn text href="/">
+            <v-btn link color="primary" :to="{ name: 'aide' }">
               <span class="mr-2">À propos de CESI Eats</span>
             </v-btn>
           </v-col>
@@ -81,5 +81,8 @@ export default {
 }
 #links {
   display: block;
+}
+#links a {
+  box-shadow: none;
 }
 </style>
