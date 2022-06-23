@@ -1,63 +1,54 @@
 <template>
-  <v-app-bar app id="navbar-component">
-    <a href="/" class="d-flex align-center" title="Page d'accueil">
-       <v-img :src="require('@/assets/logo.png')" alt="CESI Eats Logo"
-         class="shrink mr-2"
-         width="50"
-         transition="scale-transition"
-       />
-       <h2>CESI Eats</h2>
-     </a>
-
-    <v-spacer></v-spacer>
-
-    <v-btn class="reponsive-navbar" link v-for="view in viewsAvailable.filter(view => !view.isSetting)" :key="view.view" :to="view.link">
-      <v-icon v-if="view.mdi" class="mr-1">{{ view.mdi }}</v-icon>
-      <span class="mr-1">{{ view.view }}</span>
-    </v-btn>
-
-    <div class="reponsive-navbar">
-      <v-menu offset-y>
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn icon v-on="on" v-bind="attrs">
-            <v-icon>mdi-cog</v-icon>
-          </v-btn>
-        </template>
-        <v-list>
-          <v-list-item v-for="view in viewsAvailable.filter(view => view.isSetting)" :key="view.view">
-            <v-btn :href="view.link" style="width: 100%; background: none;box-shadow: none;border-bottom: 1px solid black;border-radius: 0;">
-              <v-list-item-title>
-                <v-icon v-if="view.mdi" class="mr-1">{{ view.mdi }}</v-icon>
-                <span class="mr-1">{{ view.view }}</span>
-              </v-list-item-title>
-            </v-btn>
+    <v-card id="menu-component" style="border-radius: 0; z-index: 20;">
+      <v-navigation-drawer
+        app
+        v-model="drawer"
+        :color="color"
+        :expand-on-hover="expandOnHover"
+        :mini-variant="miniVariant"
+        :permanent="permanent"
+        dark
+      >
+        <v-list dense class="py-0">
+          <v-list-item two-line :class="miniVariant && 'px-0'">
+            <v-list-item-avatar class="ml-2">
+              <img src="https://randomuser.me/api/portraits/men/81.jpg" alt="Avatar">
+            </v-list-item-avatar>
+            <v-list-item-content>
+              <v-list-item-title>NOM Prénom</v-list-item-title>
+              <v-list-item-subtitle>prenom.nom@viace.fr</v-list-item-subtitle>
+            </v-list-item-content>
           </v-list-item>
+
+          <v-btn link v-for="view in viewsAvailable" :key="view.view" :to="view.link">
+            <v-list-item link style="width: 223px;padding-left: 2px;">
+                <v-icon class="mr-5">{{ view.mdi }}</v-icon>
+                {{ view.view }}
+            </v-list-item>
+          </v-btn>
           <v-list-item>
             <v-checkbox v-model="$vuetify.theme.dark"
-              class="pt-4 ma-auto"
+              class="ml-1"
+              color="white"
               on-icon="mdi-theme-light-dark"
               off-icon="mdi-theme-light-dark"
             >
             </v-checkbox>
           </v-list-item>
         </v-list>
-      </v-menu>
-    </div>
-  </v-app-bar>
+      </v-navigation-drawer>
+    </v-card>
 </template>
 
 <script>
 export default {
-  name: 'NavbarComponent',
   data () {
     return {
       drawer: true,
-      items: [
-        { title: 'Home', icon: 'mdi-home-city' },
-        { title: 'My Account', icon: 'mdi-account' },
-        { title: 'Users', icon: 'mdi-account-group-outline' }
-      ],
-      mini: true
+      color: 'primary',
+      miniVariant: true,
+      expandOnHover: true,
+      permanent: true
     }
   },
   computed: {
@@ -119,19 +110,11 @@ export default {
 </script>
 
 <style scoped>
-#navbar-component a {
-  text-decoration: none;
+#menu-component a {
   box-shadow: none;
+  background: none;
 }
-#navbar-component a::before {
+#menu-component a::before {
   opacity: 0;
-}
-#navbar-component a:hover {
- opacity: 0.6;
-}
-@media (max-width: 700px) {
-  #navbar-component .reponsive-navbar {
-    display: none;
-  }
 }
 </style>
