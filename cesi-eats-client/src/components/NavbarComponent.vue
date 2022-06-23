@@ -15,14 +15,7 @@
 
     <v-spacer></v-spacer>
 
-    <v-btn text href="/connexion">
-      <v-icon>mdi-account</v-icon>
-      <span class="mr-2">Connexion</span>
-    </v-btn>
-
-    <v-btn text href="/inscription">
-      <span class="mr-2">Inscription</span>
-    </v-btn>
+    <span class="mr-5"><LoginComponent/></span>
 
     <v-checkbox v-model="$vuetify.theme.dark"
       class="pt-6"
@@ -33,8 +26,12 @@
 </template>
 
 <script>
+import LoginComponent from '@/components/LoginComponent'
 export default {
-  name: 'NavbarComponent'
+  name: 'NavbarComponent',
+  components: {
+    LoginComponent
+  }
 }
 </script>
 
