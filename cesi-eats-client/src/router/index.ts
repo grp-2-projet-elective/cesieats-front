@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import RegisterView from '../views/RegisterView.vue'
 import CustomerView from '../views/roles/CustomerView.vue'
 import RestaurantOwnerView from '../views/roles/RestaurantOwnerView.vue'
 import DeliveryManView from '../views/roles/DeliveryManView.vue'
@@ -16,6 +17,9 @@ const routes: Array<RouteConfig> = [
     component: HomeView
   },
   {
+    path: '/inscription',
+    name: 'inscription',
+    component: RegisterView
     path: '/client',
     name: 'client',
     component: CustomerView
