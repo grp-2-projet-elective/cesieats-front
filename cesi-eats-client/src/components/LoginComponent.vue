@@ -1,7 +1,6 @@
 <template>
     <v-dialog
       v-model="connectionDialog"
-      persistent
       max-width="600px"
     >
       <template v-slot:activator="{ on, attrs }">
@@ -20,7 +19,7 @@
         <v-form
             v-model="validate"
             ref="form"
-            @submit.prevent="newTaskFormSubmit"
+            @submit.prevent="connectionSubmit"
             lazy-validation
         >
           <v-container>
@@ -44,7 +43,7 @@
               </v-col>
             </v-row>
           </v-container>
-            <v-col cols="12"><h4>Pas encore de compte ? <a href="/inscription"> Inscrivez-vous ici</a></h4></v-col>
+            <v-col cols="12"><h4>Pas encore de compte ? <a href="/inscription">Inscrivez-vous ici</a></h4></v-col>
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn @click="cancelButtonClick">
@@ -83,11 +82,14 @@ export default {
     show1: false
   }),
   methods: {
+    validate () {
+      return false
+    },
     cancelButtonClick () {
       this.connectionDialog = false
       this.$refs.form.reset()
     },
-    newTaskFormSubmit () {
+    connectionSubmit () {
       if (this.$refs.form.validate()) {
         this.$refs.form.reset()
         this.connectionDialog = false

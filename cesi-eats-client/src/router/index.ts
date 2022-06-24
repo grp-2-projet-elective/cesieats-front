@@ -4,6 +4,7 @@ import HomeView from '../views/HomeView.vue'
 import CustomerView from '../views/roles/CustomerView.vue'
 import RestaurantOwnerView from '../views/roles/RestaurantOwnerView.vue'
 import DeliveryManView from '../views/roles/DeliveryManView.vue'
+import RestaurantsView from '../views/shop/RestaurantsView.vue'
 import HelpView from '../views/HelpView.vue'
 
 Vue.use(VueRouter)
@@ -28,6 +29,11 @@ const routes: Array<RouteConfig> = [
     path: '/livreur',
     name: 'livreur',
     component: DeliveryManView
+  },
+  {
+    path: '/restaurants',
+    name: 'restaurants',
+    component: RestaurantsView
   },
   {
     path: '/aide',

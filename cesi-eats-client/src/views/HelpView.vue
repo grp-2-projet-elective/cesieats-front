@@ -1,11 +1,9 @@
 <template>
   <div id="customer-view">
-    <v-container>
-      <CustomerOperation/>
-      <RestaurantOwnerOperation/>
-      <DeliveryManOperation/>
-      <JoinUsComponent/>
-    </v-container>
+    <CustomerOperation/>
+    <RestaurantOwnerOperation/>
+    <DeliveryManOperation/>
+    <JoinUsComponent/>
   </div>
 </template>
 

@@ -11,10 +11,16 @@
 
     <v-spacer></v-spacer>
 
-    <v-btn class="reponsive-navbar" link v-for="view in viewsAvailable.filter(view => !view.isSetting)" :key="view.view" :to="view.link">
-      <v-icon v-if="view.mdi" class="mr-1">{{ view.mdi }}</v-icon>
-      <span class="mr-1">{{ view.view }}</span>
-    </v-btn>
+    <div v-if="viewsAvailable[0].view === 'Connexion'">
+      <LoginComponent/>
+    </div>
+
+    <div v-if="viewsAvailable[0].view !== 'Connexion'">
+      <v-btn class="reponsive-navbar" link v-for="view in viewsAvailable.filter(view => !view.isSetting)" :key="view.view" :to="view.link">
+        <v-icon v-if="view.mdi" class="mr-1">{{ view.mdi }}</v-icon>
+        <span class="mr-1">{{ view.view }}</span>
+      </v-btn>
+    </div>
 
     <div class="reponsive-navbar">
       <v-menu offset-y>
@@ -48,73 +54,14 @@
 
 <script>
 import LoginComponent from '@/components/LoginComponent'
+
 export default {
   name: 'NavbarComponent',
-  data () {
-    return {
-      drawer: true,
-      items: [
-        { title: 'Home', icon: 'mdi-home-city' },
-        { title: 'My Account', icon: 'mdi-account' },
-        { title: 'Users', icon: 'mdi-account-group-outline' }
-      ],
-      mini: true
-    }
+  components: {
+    LoginComponent
   },
-  computed: {
-    viewsAvailable () {
-      const userRole = 'RESTAURANT_OWNER'
-      let viewsAvailable = []
-
-      switch (userRole) {
-        case 'CUSTOMER':
-          viewsAvailable = [
-            { isSetting: false, view: 'Restaurants', link: '/restaurants', mdi: 'mdi-silverware-fork-knife' },
-            { isSetting: false, view: 'Panier', link: '/panier', mdi: 'mdi-cart' },
-            { isSetting: true, view: 'Profil', link: '/profil', mdi: 'mdi-account-wrench' },
-            { isSetting: true, view: 'Historique', link: '/historique', mdi: 'mdi-history' },
-            { isSetting: true, view: 'Parrainage', link: '/parrainage', mdi: 'mdi-account-multiple-check' }
-          ]
-          break
-        case 'RESTAURANT_OWNER':
-          viewsAvailable = [
-            { isSetting: false, view: 'Mon restaurant', link: '/mon-restaurant', mdi: 'mdi-silverware-fork-knife' },
-            { isSetting: false, view: 'Commandes', link: '/commandes', mdi: 'mdi-application-edit' },
-            { isSetting: true, view: 'Profil', link: '/profil', mdi: 'mdi-account-wrench' },
-            { isSetting: true, view: 'Historique', link: '/historique', mdi: 'mdi-history' },
-            { isSetting: true, view: 'Statistiques', link: '/statistiques', mdi: 'mdi-chart-line' },
-            { isSetting: true, view: 'Parrainage', link: '/parrainage', mdi: 'mdi-account-multiple-check' }
-          ]
-          break
-        case 'DELIVERY_MAN':
-          viewsAvailable = [
-            { isSetting: false, view: 'Livraisons', link: '/livraisons', mdi: 'mdi-bicycle' },
-            { isSetting: true, view: 'Profil', link: '/profil', mdi: 'mdi-account-wrench' },
-            { isSetting: true, view: 'Historique', link: '/historique', mdi: 'mdi-history' },
-            { isSetting: true, view: 'Parrainage', link: '/parrainage', mdi: 'mdi-account-multiple-check' }
-          ]
-          break
-        case 'TECHNICAL_DEPARTMENT':
-        case 'COMERCIAL_DEPARTMENT':
-          viewsAvailable = [
-            { isSetting: false, view: 'Comptes', link: '/comptes', mdi: 'mdi-account-multiple' },
-            { isSetting: true, view: 'Profil', link: '/profil', mdi: 'mdi-account-wrench' },
-            { isSetting: true, view: 'Logs', link: '/logs', mdi: 'mdi-archive-arrow-up' },
-            { isSetting: true, view: 'Statistiques', link: '/statistiques', mdi: 'mdi-chart-line' },
-            { isSetting: true, view: 'Parrainage', link: '/parrainage', mdi: 'mdi-account-multiple-check' }
-          ]
-          break
-        case 'EXTERNAL':
-          break
-        default:
-          viewsAvailable = [
-            { isSetting: false, view: 'Connexion', link: 'connexion', mdi: 'mdi-account' },
-            { isSetting: false, view: 'Inscription', link: 'inscription', mdi: 'mdi-account-plus' }
-          ]
-      }
-
-      return viewsAvailable
-    }
+  props: {
+    viewsAvailable: Array
   }
 }
 </script>

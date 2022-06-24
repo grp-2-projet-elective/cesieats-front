@@ -3,7 +3,7 @@
     <div class="container--fluid">
       <div id="search-restaurant">
         <h1>Vos plats préférés, directement à votre porte</h1>
-        <v-btn color="primary" id="search-restaurant-btn">
+        <v-btn link color="primary" id="search-restaurant-btn" :to="{ name: 'restaurants' }">
           <span class="mr-2">Trouver un restaurant</span>
           <v-icon>mdi-arrow-right</v-icon>
         </v-btn>
