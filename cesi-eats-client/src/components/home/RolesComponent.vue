@@ -1,27 +1,27 @@
 <template>
-  <div id="roles">
-    <v-container>
+  <div id="roles-component">
+    <v-container class="pr-0 pl-0">
       <v-row>
         <v-col xs="12" sm="6" lg="4">
-          <a href="/clients" title="Clients">
+          <a href="/client" title="Client">
             <v-card class="role-cards">
-              <v-img :src="require('@/assets/roles/customer.jpg')" alt="Clients" />
+              <v-img :src="require('@/assets/roles/customer.jpg')" alt="Client"/>
             </v-card>
             <h3>Utilisez notre application dès maintenant</h3>
           </a>
         </v-col>
         <v-col xs="12" sm="6" lg="4">
-          <a href="/restaurateurs" title="Restaurateurs">
+          <a href="/restaurateur" title="Restaurateur">
             <v-card class="role-cards">
-              <v-img :src="require('@/assets/roles/restaurant-owner.jpg')" alt="Clients" />
+              <v-img :src="require('@/assets/roles/restaurant-owner.jpg')" alt="Restaurateur"/>
             </v-card>
             <h3>Les plats de vos restaurants préférés, livrés chez vous</h3>
           </a>
         </v-col>
         <v-col xs="12" sm="6" lg="4">
-          <a href="/restaurateurs" title="Restaurateurs">
+          <a href="/livreur" title="Livreur">
             <v-card class="role-cards">
-              <v-img :src="require('@/assets/roles/delivery-man.jpg')" alt="Clients" />
+              <v-img :src="require('@/assets/roles/delivery-man.jpg')" alt="Livreur"/>
             </v-card>
             <h3>Livrez avec CESI Eats</h3>
           </a>
@@ -38,19 +38,19 @@ export default {
 </script>
 
 <style scoped>
-#roles a {
+#roles-component a {
   text-decoration: none;
   color: black;
 }
-#roles .role-cards {
+#roles-component .role-cards {
   box-shadow: none;
   overflow: hidden;
 }
-#roles .role-cards div {
+#roles-component .role-cards div {
   transform: scale(1);
   transition: all 0.3s ease-in;
 }
-#roles a:hover .role-cards div {
+#roles-component a:hover .role-cards div {
   transform: scale(1.2);
 }
 </style>

@@ -1,9 +1,9 @@
 <template>
-  <div id="leaderboard">
+  <div id="leaderboard-component">
     <div class="container--fluid">
       <div id="search-restaurant">
         <h1>Vos plats préférés, directement à votre porte</h1>
-        <v-btn text id="search-restaurant-btn">
+        <v-btn link color="primary" id="search-restaurant-btn" :to="{ name: 'restaurants' }">
           <span class="mr-2">Trouver un restaurant</span>
           <v-icon>mdi-arrow-right</v-icon>
         </v-btn>
@@ -19,12 +19,12 @@ export default {
 </script>
 
 <style scoped>
-#leaderboard {
+#leaderboard-component {
   position: relative;
   width: 100%;
   height: 100vh;
 }
-#leaderboard .container--fluid {
+#leaderboard-component .container--fluid {
   position: absolute;
   top: -64px;
   left: 0;
@@ -42,10 +42,9 @@ export default {
   color: #fff;
 }
 #search-restaurant-btn {
-  color: #000;
-  background-color: #fff;
   margin-top: 25px;
-  width: 50%;
+  width: 75%;
+  min-width: 350px;
   height: 50px;
 }
 </style>

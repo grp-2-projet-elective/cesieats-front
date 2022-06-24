@@ -1,9 +1,5 @@
 <template>
-  <v-app-bar app id="navbar">
-    <v-btn text class="mr-4">
-      <v-icon>mdi-menu</v-icon>
-    </v-btn>
-
+  <v-app-bar app id="navbar-component">
     <a href="/" class="d-flex align-center" title="Page d'accueil">
        <v-img :src="require('@/assets/logo.png')" alt="CESI Eats Logo"
          class="shrink mr-2"
@@ -15,31 +11,75 @@
 
     <v-spacer></v-spacer>
 
-    <v-btn text href="/connexion">
-      <v-icon>mdi-account</v-icon>
-      <span class="mr-2">Connexion</span>
-    </v-btn>
+    <div v-if="viewsAvailable[0].view === 'Connexion'">
+      <LoginComponent/>
+    </div>
 
-    <v-btn text href="/inscription">
-      <span class="mr-2">Inscription</span>
-    </v-btn>
+    <div v-if="viewsAvailable[0].view !== 'Connexion'">
+      <v-btn class="reponsive-navbar" link v-for="view in viewsAvailable.filter(view => !view.isSetting)" :key="view.view" :to="view.link">
+        <v-icon v-if="view.mdi" class="mr-1">{{ view.mdi }}</v-icon>
+        <span class="mr-1">{{ view.view }}</span>
+      </v-btn>
+    </div>
 
-    <v-checkbox v-model="$vuetify.theme.dark"
-      class="pt-6"
-      on-icon="mdi-theme-light-dark"
-      off-icon="mdi-theme-light-dark"
-    ></v-checkbox>
+    <div class="reponsive-navbar">
+      <v-menu offset-y>
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn icon v-on="on" v-bind="attrs">
+            <v-icon>mdi-cog</v-icon>
+          </v-btn>
+        </template>
+        <v-list>
+          <v-list-item v-for="view in viewsAvailable.filter(view => view.isSetting)" :key="view.view">
+            <v-btn :href="view.link" style="width: 100%; background: none;box-shadow: none;border-bottom: 1px solid black;border-radius: 0;">
+              <v-list-item-title>
+                <v-icon v-if="view.mdi" class="mr-1">{{ view.mdi }}</v-icon>
+                <span class="mr-1">{{ view.view }}</span>
+              </v-list-item-title>
+            </v-btn>
+          </v-list-item>
+          <v-list-item>
+            <v-checkbox v-model="$vuetify.theme.dark"
+              class="pt-4 ma-auto"
+              on-icon="mdi-theme-light-dark"
+              off-icon="mdi-theme-light-dark"
+            >
+            </v-checkbox>
+          </v-list-item>
+        </v-list>
+      </v-menu>
+    </div>
   </v-app-bar>
 </template>
 
 <script>
+import LoginComponent from '@/components/LoginComponent'
+
 export default {
-  name: 'NavbarComponent'
+  name: 'NavbarComponent',
+  components: {
+    LoginComponent
+  },
+  props: {
+    viewsAvailable: Array
+  }
 }
 </script>
 
 <style scoped>
-#navbar a {
+#navbar-component a {
   text-decoration: none;
+  box-shadow: none;
+}
+#navbar-component a::before {
+  opacity: 0;
+}
+#navbar-component a:hover {
+ opacity: 0.6;
+}
+@media (max-width: 700px) {
+  #navbar-component .reponsive-navbar {
+    display: none;
+  }
 }
 </style>
