@@ -1,5 +1,5 @@
 <template>
-    <v-card id="menu-component" style="border-radius: 0; z-index: 20;">
+    <v-card id="menu-component" v-if="viewsAvailable[0].view !== 'Connexion'" style="border-radius: 0;">
       <v-navigation-drawer
         app
         v-model="drawer"
@@ -42,6 +42,9 @@
 
 <script>
 export default {
+  props: {
+    viewsAvailable: Array
+  },
   data () {
     return {
       drawer: true,
@@ -49,61 +52,6 @@ export default {
       miniVariant: true,
       expandOnHover: true,
       permanent: true
-    }
-  },
-  computed: {
-    viewsAvailable () {
-      const userRole = 'RESTAURANT_OWNER'
-      let viewsAvailable = []
-
-      switch (userRole) {
-        case 'CUSTOMER':
-          viewsAvailable = [
-            { isSetting: false, view: 'Restaurants', link: '/restaurants', mdi: 'mdi-silverware-fork-knife' },
-            { isSetting: false, view: 'Panier', link: '/panier', mdi: 'mdi-cart' },
-            { isSetting: true, view: 'Profil', link: '/profil', mdi: 'mdi-account-wrench' },
-            { isSetting: true, view: 'Historique', link: '/historique', mdi: 'mdi-history' },
-            { isSetting: true, view: 'Parrainage', link: '/parrainage', mdi: 'mdi-account-multiple-check' }
-          ]
-          break
-        case 'RESTAURANT_OWNER':
-          viewsAvailable = [
-            { isSetting: false, view: 'Mon restaurant', link: '/mon-restaurant', mdi: 'mdi-silverware-fork-knife' },
-            { isSetting: false, view: 'Commandes', link: '/commandes', mdi: 'mdi-application-edit' },
-            { isSetting: true, view: 'Profil', link: '/profil', mdi: 'mdi-account-wrench' },
-            { isSetting: true, view: 'Historique', link: '/historique', mdi: 'mdi-history' },
-            { isSetting: true, view: 'Statistiques', link: '/statistiques', mdi: 'mdi-chart-line' },
-            { isSetting: true, view: 'Parrainage', link: '/parrainage', mdi: 'mdi-account-multiple-check' }
-          ]
-          break
-        case 'DELIVERY_MAN':
-          viewsAvailable = [
-            { isSetting: false, view: 'Livraisons', link: '/livraisons', mdi: 'mdi-bicycle' },
-            { isSetting: true, view: 'Profil', link: '/profil', mdi: 'mdi-account-wrench' },
-            { isSetting: true, view: 'Historique', link: '/historique', mdi: 'mdi-history' },
-            { isSetting: true, view: 'Parrainage', link: '/parrainage', mdi: 'mdi-account-multiple-check' }
-          ]
-          break
-        case 'TECHNICAL_DEPARTMENT':
-        case 'COMERCIAL_DEPARTMENT':
-          viewsAvailable = [
-            { isSetting: false, view: 'Comptes', link: '/comptes', mdi: 'mdi-account-multiple' },
-            { isSetting: true, view: 'Profil', link: '/profil', mdi: 'mdi-account-wrench' },
-            { isSetting: true, view: 'Logs', link: '/logs', mdi: 'mdi-archive-arrow-up' },
-            { isSetting: true, view: 'Statistiques', link: '/statistiques', mdi: 'mdi-chart-line' },
-            { isSetting: true, view: 'Parrainage', link: '/parrainage', mdi: 'mdi-account-multiple-check' }
-          ]
-          break
-        case 'EXTERNAL':
-          break
-        default:
-          viewsAvailable = [
-            { isSetting: false, view: 'Connexion', link: 'connexion', mdi: 'mdi-account' },
-            { isSetting: false, view: 'Inscription', link: 'inscription', mdi: 'mdi-account-plus' }
-          ]
-      }
-
-      return viewsAvailable
     }
   }
 }
