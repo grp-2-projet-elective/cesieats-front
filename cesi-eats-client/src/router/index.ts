@@ -20,6 +20,8 @@ const routes: Array<RouteConfig> = [
     path: '/inscription',
     name: 'inscription',
     component: RegisterView
+  },
+  {
     path: '/client',
     name: 'client',
     component: CustomerView
