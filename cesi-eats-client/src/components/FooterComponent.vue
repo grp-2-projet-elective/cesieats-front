@@ -68,6 +68,7 @@ export default {
 <style scoped>
 #footer-component div {
   width: 100%;
+  border-radius: 0;
 }
 #footer-component a {
   text-decoration: none;
