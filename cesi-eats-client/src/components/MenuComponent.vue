@@ -1,5 +1,5 @@
 <template>
-    <v-card id="menu-component" v-if="viewsAvailable[0].view !== 'Connexion'" style="border-radius: 0;">
+    <v-card id="menu-component" v-if="viewsAvailable[0].view !== 'Connexion'">
       <v-navigation-drawer
         app
         v-model="drawer"
@@ -58,6 +58,9 @@ export default {
 </script>
 
 <style scoped>
+#menu-component {
+  border-radius: 0;
+}
 #menu-component a {
   box-shadow: none;
   background: none;
