@@ -56,9 +56,9 @@
                         <thead>
                         <tr>
                           <th class="text-left">Nom</th>
-                          <th class="text-left">Quantité</th>
-                          <th class="text-left">Prix unitaire</th>
-                          <th class="text-left">Prix total</th>
+                          <th class="text-center">Quantité</th>
+                          <th class="text-center">Prix unitaire</th>
+                          <th class="text-center">Prix total</th>
                           <th class="text-center">Retirer</th>
                           <th class="text-center">Supprimer</th>
                         </tr>
@@ -66,9 +66,9 @@
                         <tbody>
                           <tr v-for="item in cart.filter(item => item.restaurantId === restaurant.id)" :key="item.id">
                             <td>{{ item.name }}</td>
-                            <td>{{ item.quantity }}</td>
-                            <td>{{ item.price }} €</td>
-                            <td>{{ item.quantity * item.price }} €</td>
+                            <td class="text-center">{{ item.quantity }}</td>
+                            <td class="text-center">{{ item.price }} €</td>
+                            <td class="text-center">{{ item.quantity * item.price }} €</td>
                             <td class="text-center">
                               <v-btn icon @click="removeFromCart(item)">
                                 <v-icon color="primary">mdi-minus-circle</v-icon>
@@ -83,7 +83,7 @@
                           <tr>
                             <td class="font-weight-bold">Total</td>
                             <td colspan="2"></td>
-                            <td class="font-weight-bold">{{ totalPrice }} €</td>
+                            <td class="font-weight-bold text-center">{{ totalPrice }} €</td>
                             <td colspan="2"></td>
                           </tr>
                         </tbody>
