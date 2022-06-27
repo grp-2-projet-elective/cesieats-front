@@ -15,7 +15,7 @@
                     <v-btn text color="primary" @click="toggle">Découvrir</v-btn>
                     <v-spacer></v-spacer>
                     <div class="quantity-container">
-                      <input v-model="menu.quantity" class="quantity-input" type="number" placeholder="0" value="0" disabled/>
+                      <input class="quantity-input" type="number" :value="fetchQuantity(menu)" disabled/>
                     </div>
                     <v-spacer></v-spacer>
                     <div class="actions-container">
@@ -54,6 +54,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 
 export default {
   name: 'MenusComponent',
@@ -73,7 +74,11 @@ export default {
       this.$store.commit('removeFromCart', item)
     },
     fetchQuantity (item) {
-      this.$store.commit('fetchQuantity', item)
+      const mp = this.cart.cart.find(mp => mp.id === item.id && mp.name === item.name)
+      if (mp) {
+        return mp.quantity
+      }
+      return 0
     }
   },
   computed: {
@@ -83,7 +88,10 @@ export default {
         { name: '2' },
         { name: '3' }
       ]
-    }
+    },
+    ...mapState([
+      'cart'
+    ])
   }
 }
 </script>

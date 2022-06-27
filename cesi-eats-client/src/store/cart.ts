@@ -17,8 +17,6 @@ const mutations = {
       Vue.set(item, 'totalPrice', item.price)
     }
     this.commit('saveCart')
-
-    console.log(state.cart)
   },
   removeFromCart (state, item) {
     const mp = state.cart.find(mp => mp.id === item.id && mp.name === item.name)
@@ -30,14 +28,6 @@ const mutations = {
       }
     }
     this.commit('saveCart')
-  },
-  fetchQuantity (state, item) {
-    const mp = state.cart.find(mp => mp.id === item.id && mp.name === item.name)
-    if (mp) {
-      console.log(mp.quantity)
-      return mp.quantity
-    }
-    return 0
   },
   removeAllQuantityFromCart (state, item) {
     const mp = state.cart.find(mp => mp.id === item.id && mp.name === item.name)
