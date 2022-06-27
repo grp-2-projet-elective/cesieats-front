@@ -3,7 +3,7 @@
       <v-navigation-drawer
         app
         v-model="drawer"
-        :color="color"
+        color="primary"
         :expand-on-hover="expandOnHover"
         :mini-variant="miniVariant"
         :permanent="permanent"
@@ -24,6 +24,7 @@
             <v-list-item link style="width: 223px;padding-left: 2px;">
                 <v-icon class="mr-5">{{ view.mdi }}</v-icon>
                 {{ view.view }}
+                <v-badge class="ml-1" v-if="view.view === 'Panier' && totalQuantity > 0" color="primary" :content="totalQuantity"></v-badge>
             </v-list-item>
           </v-btn>
           <v-list-item>
@@ -41,17 +42,26 @@
 </template>
 
 <script>
+import $store from '@/store/cart'
+
 export default {
   props: {
     viewsAvailable: Array
   },
-  data () {
-    return {
-      drawer: true,
-      color: 'primary',
-      miniVariant: true,
-      expandOnHover: true,
-      permanent: true
+  data: () => ({
+    drawer: true,
+    miniVariant: true,
+    expandOnHover: true,
+    permanent: true,
+    cart: $store.state.cart
+  }),
+  computed: {
+    totalQuantity () {
+      let totalQuantity = 0
+      for (const item of this.cart) {
+        totalQuantity += item.quantity
+      }
+      return totalQuantity.toString()
     }
   }
 }

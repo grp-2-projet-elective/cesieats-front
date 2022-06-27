@@ -8,7 +8,6 @@ import RegisterComponent from '@/components/RegisterComponent.vue'
 
 export default Vue.extend({
   name: 'RegisterView',
-
   components: {
     RegisterComponent
   }

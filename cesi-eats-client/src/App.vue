@@ -44,27 +44,30 @@ export default Vue.extend({
             { isSetting: false, view: 'Mon restaurant', link: '/mon-restaurant', mdi: 'mdi-silverware-fork-knife' },
             { isSetting: false, view: 'Commandes', link: '/commandes', mdi: 'mdi-application-edit' },
             { isSetting: true, view: 'Profil', link: '/profil', mdi: 'mdi-account-wrench' },
-            { isSetting: true, view: 'Historique', link: '/historique', mdi: 'mdi-history' },
             { isSetting: true, view: 'Statistiques', link: '/statistiques', mdi: 'mdi-chart-line' }
           ]
           break
         case 'DELIVERY_MAN':
           viewsAvailable = [
             { isSetting: false, view: 'Livraisons', link: '/livraisons', mdi: 'mdi-bicycle' },
-            { isSetting: true, view: 'Profil', link: '/profil', mdi: 'mdi-account-wrench' },
-            { isSetting: true, view: 'Historique', link: '/historique', mdi: 'mdi-history' }
+            { isSetting: true, view: 'Profil', link: '/profil', mdi: 'mdi-account-wrench' }
           ]
           break
         case 'COMERCIAL_DEPARTMENT':
           viewsAvailable = [
             { isSetting: false, view: 'Comptes', link: '/comptes', mdi: 'mdi-account-multiple' },
             { isSetting: true, view: 'Profil', link: '/profil', mdi: 'mdi-account-wrench' },
-            { isSetting: true, view: 'Logs', link: '/logs', mdi: 'mdi-archive-arrow-up' },
             { isSetting: true, view: 'Statistiques', link: '/statistiques', mdi: 'mdi-chart-line' }
           ]
           break
         case 'TECHNICAL_DEPARTMENT':
+          viewsAvailable = [
+            { isSetting: true, view: 'Logs', link: '/logs', mdi: 'mdi-archive-arrow-up' }
+            // Component
+          ]
+          break
         case 'EXTERNAL':
+          // Component
           break
         default:
           viewsAvailable = [
