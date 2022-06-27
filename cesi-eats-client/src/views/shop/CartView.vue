@@ -172,7 +172,6 @@ export default {
     totalPrice () {
       let totalPrice = 0
       for (const item of this.cart) {
-        console.log(item)
         totalPrice += item.totalPrice
       }
       return totalPrice.toString()
