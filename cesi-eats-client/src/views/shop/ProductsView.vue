@@ -3,10 +3,10 @@
     <v-container class="pr-0 pl-0">
       <h2>Notre sélection chez {{ restaurant.name }}</h2>
       <v-row class="mt-5">
-        <MenusComponent :menus="menus"/>
+        <MenusComponent v-if="checkMenusByRestaurant" :restaurant="restaurant" :menus="menus"/>
       </v-row>
       <v-row class="mt-5" v-for="category in getAllCategories" :key="category">
-        <ProductsComponent :products="products" :category="category"/>
+        <ProductsComponent v-if="checkProductsByRestaurant(category)" :restaurant="restaurant" :products="products" :category="category"/>
       </v-row>
     </v-container>
   </div>
@@ -67,6 +67,24 @@ export default {
         restaurantId: 0,
         price: 8.50,
         image: 'http://mcdorivedroite.com/wp-content/uploads/2017/02/layout_icon-1.png'
+      },
+      {
+        id: 1,
+        name: 'Best Of',
+        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+        products: [0, 1, 2],
+        restaurantId: 1,
+        price: 6.50,
+        image: 'http://mcdorivedroite.com/wp-content/uploads/2017/02/layout_icon-1.png'
+      },
+      {
+        id: 2,
+        name: 'Best Of Other',
+        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+        products: [0, 1, 2],
+        restaurantId: 1,
+        price: 6.50,
+        image: 'http://mcdorivedroite.com/wp-content/uploads/2017/02/layout_icon-1.png'
       }
     ],
     products: [
@@ -108,6 +126,24 @@ export default {
       }
     ]
   }),
+  methods: {
+    checkMenusByRestaurant () {
+      for (let i = 0; i < this.menus.length; i++) {
+        if (this.menus[i].restaurantId === this.restaurant.id) {
+          return true
+        }
+      }
+      return false
+    },
+    checkProductsByRestaurant (category) {
+      for (let i = 0; i < this.products.length; i++) {
+        if (this.products[i].categories.includes(category) && this.products[i].restaurantId === this.restaurant.id) {
+          return true
+        }
+      }
+      return false
+    }
+  },
   computed: {
     getAllCategories () {
       const categories = []

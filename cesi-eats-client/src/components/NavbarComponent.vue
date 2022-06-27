@@ -19,6 +19,7 @@
       <v-btn class="reponsive-navbar" link v-for="view in viewsAvailable.filter(view => !view.isSetting)" :key="view.view" :to="view.link">
         <v-icon v-if="view.mdi" class="mr-1">{{ view.mdi }}</v-icon>
         <span class="mr-1">{{ view.view }}</span>
+        <v-badge class="ml-1" v-if="view.view === 'Panier' && totalQuantity > 0" color="primary" :content="totalQuantity"></v-badge>
       </v-btn>
     </div>
 
@@ -54,6 +55,7 @@
 
 <script>
 import LoginComponent from '@/components/LoginComponent'
+import $store from '@/store/cart'
 
 export default {
   name: 'NavbarComponent',
@@ -62,6 +64,18 @@ export default {
   },
   props: {
     viewsAvailable: Array
+  },
+  data: () => ({
+    cart: $store.state.cart
+  }),
+  computed: {
+    totalQuantity () {
+      let totalQuantity = 0
+      for (const item of this.cart) {
+        totalQuantity += item.quantity
+      }
+      return totalQuantity.toString()
+    }
   }
 }
 </script>
