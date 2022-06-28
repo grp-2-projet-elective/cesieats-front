@@ -3,10 +3,10 @@
     <v-container>
       <h3>Menus</h3>
       <v-row>
-        <v-col style="height: 375px;">
+        <v-col style="height: 410px;">
           <v-sheet class="mx-auto" width="100%">
             <v-slide-group v-model="model" class="pa-4" multiple show-arrows>
-              <v-slide-item v-for="(menu, idx) in menus.filter(menu => menu.restaurantId === restaurant.id)" :key="idx" v-slot="{ active, toggle }">
+              <v-slide-item v-for="(menu, idx) in menus.filter(menu => menu.restaurantId === restaurant._id)" :key="idx" v-slot="{ active, toggle }">
                 <v-card outlined class="mx-auto" max-width="200">
                   <v-img :src="menu.image" height="175px"/>
                   <v-card-title>{{ menu.name }}</v-card-title>
@@ -30,9 +30,8 @@
                   <v-expand-transition>
                     <v-card v-if="active ? reveal=true : reveal=false" class="transition-fast-in-fast-out v-card--reveal" style="height: 100%;">
                       <v-card-title>{{ menu.name }}</v-card-title>
-                      <v-card-subtitle>
-                        {{ menu.description }}
-                        <br/><br/>
+                      <v-card-subtitle class="text-justify">
+                        <p v-if="menu.description">{{ menu.description.slice(0, 142) + '...' }}</p>
                         Produits disponibles:
                         <ul v-for="product in productsFromMenu" :key="product.name">
                           <li>{{ product.name }}</li>

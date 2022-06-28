@@ -18,29 +18,20 @@
           <v-card class="ma-auto" max-width="80%">
             <v-list>
               <v-list-item>Catégories :</v-list-item>
-              <v-list-item-group multiple>
-                <template v-for="(category, i) in categories">
+                <template v-for="(category, i) in getAllCategories(restaurants)">
                   <v-divider v-if="!category" :key="`divider-${i}`"></v-divider>
                   <v-list-item v-else :key="`item-${i}`" :value="category" active-class="text--accent-4">
-                    <template v-slot:default="{ active }">
-                      <v-list-item-content>
-                        <v-list-item-title v-text="category"></v-list-item-title>
-                      </v-list-item-content>
-                      <v-list-item-action>
-                        <v-checkbox :input-value="active" color="secondary accent-4"></v-checkbox>
-                      </v-list-item-action>
-                    </template>
+                    <v-checkbox v-model="search.categories" :label="category" :value="category"></v-checkbox>
                   </v-list-item>
                 </template>
-              </v-list-item-group>
             </v-list>
           </v-card>
         </v-col>
 
         <v-col md="12" lg="9">
-          <v-card v-for="restaurant in restaurantToDisplay" :key="restaurant.name"
+          <v-card v-for="restaurant in restaurantToDisplay(restaurants)" :key="restaurant.name"
             elevation="2" outlined class="restaurant-cards mb-5">
-            <router-link :to="/restaurants/ + restaurant.id + '/' + nameForUrl(restaurant.name)" class="text-decoration-none">
+            <router-link :to="/restaurants/ + nameForUrl(restaurant.name) + '/' + restaurant._id" class="text-decoration-none">
               <v-row>
                 <v-col sm="3">
                   <v-img :src="restaurant.image" :alt="restaurant.name" height="100%"/>
@@ -75,58 +66,21 @@
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
   name: 'RestaurantsView',
   data: () => ({
     search: {
       searchByCity: '',
-      searchByName: ''
+      searchByName: '',
+      categories: []
     },
     pagination: {
       pageNumber: 1,
       pageSize: 5
     },
-    categories: [
-      '',
-      'Burger',
-      'Chinois',
-      'Japonais',
-      'Pizza'
-    ],
-    restaurants: [
-      {
-        id: 0,
-        name: 'Lorem Ipsum',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ultrices fringilla justo, ut pellentesque diam pulvinar id. Sed pretium diam id elit mattis, sed vehicula dolor tempor. Sed sagittis arcu id orci commodo feugiat. In hac habitasse platea dictumst. Interdum et malesuada fames ac ante ipsum primis in faucibus. Donec sit amet euismod mi. Etiam condimentum magna sed nisi interdum, id fringilla nibh blandit. Nulla fringilla gravida mi at fermentum.',
-        image: 'https://media-cdn.tripadvisor.com/media/photo-s/1a/18/3a/cb/restaurant-le-47.jpg',
-        categories: ['Japonais', 'Healthy'],
-        restaurantOwnersId: [42],
-        openingHours: '9h - 12h / 14h - 19h',
-        location: {
-          city: 'Guérande',
-          zipCode: '42024',
-          address: '42 rue du Lorem',
-          latitude: 42,
-          longitude: 24
-        }
-      },
-      {
-        id: 1,
-        name: 'Test rien à voir',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ultrices fringilla justo, ut pellentesque diam pulvinar id. Sed pretium diam id elit mattis, sed vehicula dolor tempor. Sed sagittis arcu id orci commodo feugiat. In hac habitasse platea dictumst. Interdum et malesuada fames ac ante ipsum primis in faucibus. Donec sit amet euismod mi. Etiam condimentum magna sed nisi interdum, id fringilla nibh blandit. Nulla fringilla gravida mi at fermentum.',
-        image: 'https://media-cdn.tripadvisor.com/media/photo-s/1a/18/3a/cb/restaurant-le-47.jpg',
-        categories: ['Japonais', 'Healthy'],
-        restaurantOwnersId: [42],
-        openingHours: '9h - 12h / 14h - 19h',
-        location: {
-          city: 'Saint-Nazaire',
-          zipCode: '42024',
-          address: '42 rue du Lorem',
-          latitude: 42,
-          longitude: 24
-        }
-      }
-    ]
+    restaurants: []
   }),
   methods: {
     nameForUrl (name) {
@@ -136,6 +90,42 @@ export default {
     },
     nextPage (page) {
       this.pagination.pageNumber = page
+    },
+    getAllCategories (allRestaurants) {
+      const categories = ['']
+      for (let i = 0; i < allRestaurants.length; i++) {
+        for (let j = 0; j < allRestaurants[i].categories.length; j++) {
+          if (!categories.includes(allRestaurants[i].categories[j])) {
+            categories.push(allRestaurants[i].categories[j])
+          }
+        }
+      }
+      return categories
+    },
+    restaurantToDisplay (allRestaurants) {
+      const start = this.pagination.pageNumber * this.pagination.pageSize - this.pagination.pageSize
+      const end = start + this.pagination.pageSize
+      const filteredByCity = allRestaurants.filter(restaurant => {
+        return restaurant.location.city.toLowerCase().includes(this.search.searchByCity.toLowerCase())
+      })
+      const filteredByName = filteredByCity.filter(restaurant => {
+        return restaurant.name.toLowerCase().includes(this.search.searchByName.toLowerCase())
+      })
+
+      const categorizedRestaurant = []
+      for (let i = 0; i < filteredByName.length; i++) {
+        for (const category of this.search.categories) {
+          if (filteredByName[i].categories.includes(category)) {
+            categorizedRestaurant.push(filteredByName[i])
+            break
+          }
+        }
+      }
+
+      if (categorizedRestaurant.length === 0) {
+        return filteredByName.slice(start, end)
+      }
+      return categorizedRestaurant.slice(start, end)
     }
   },
   computed: {
@@ -143,21 +133,12 @@ export default {
       const length = this.restaurants.length
       const size = this.pagination.pageSize
       return Math.ceil(length / size)
-    },
-    restaurantToDisplay () {
-      const start = this.pagination.pageNumber * this.pagination.pageSize - this.pagination.pageSize
-      const end = start + this.pagination.pageSize
-
-      const paginatedRestaurants = this.restaurants.slice(start, end)
-      const filteredByCity = paginatedRestaurants.filter(restaurant => {
-        return restaurant.location.city.toLowerCase().includes(this.search.searchByCity.toLowerCase())
-      })
-      const filteredByName = filteredByCity.filter(restaurant => {
-        return restaurant.name.toLowerCase().includes(this.search.searchByName.toLowerCase())
-      })
-
-      return filteredByName
     }
+  },
+  mounted () {
+    axios.get('http://localhost:4200/api/v1/restaurants/')
+      .then(response => (this.restaurants = response.data))
+      .catch(error => console.log(error))
   }
 }
 </script>

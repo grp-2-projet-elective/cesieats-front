@@ -10,11 +10,11 @@ const mutations = {
     const mp = state.cart.find(mp => mp.id === item.id && mp.name === item.name)
     if (mp) {
       mp.quantity++
-      mp.totalPrice += mp.price
+      mp.totalPrice += Number(mp.price)
     } else {
       state.cart.push(item)
       Vue.set(item, 'quantity', 1)
-      Vue.set(item, 'totalPrice', item.price)
+      Vue.set(item, 'totalPrice', Number(item.price))
     }
     this.commit('saveCart')
   },
@@ -22,7 +22,7 @@ const mutations = {
     const mp = state.cart.find(mp => mp.id === item.id && mp.name === item.name)
     if (mp) {
       mp.quantity--
-      mp.totalPrice -= mp.price
+      mp.totalPrice -= Number(mp.price)
       if (mp.quantity < 1) {
         state.cart.splice(state.cart.indexOf(item), 1)
       }
@@ -37,8 +37,8 @@ const mutations = {
     this.commit('saveCart')
   },
   removeAllFromCart (state, item) {
-    const mps = state.cart.filter(mp => mp.restaurantId === item.id)
-    for (const mp in mps) {
+    const mps = state.cart.filter(mp => mp.restaurantId === item._id)
+    for (const mp of mps) {
       state.cart.splice(state.cart.indexOf(mp), 1)
     }
     this.commit('saveCart')

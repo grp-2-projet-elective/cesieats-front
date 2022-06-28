@@ -3,10 +3,10 @@
     <v-container>
       <h3>{{ category }}</h3>
       <v-row>
-        <v-col style="height: 375px;">
+        <v-col style="height: 410px;">
           <v-sheet class="mx-auto" width="100%">
             <v-slide-group v-model="model" class="pa-4" multiple show-arrows>
-              <v-slide-item v-for="(product, idx) in products.filter(product => product.restaurantId === restaurant.id && product.categories.includes(category))" :key="idx" v-slot="{ active, toggle }">
+              <v-slide-item v-for="(product, idx) in products.filter(product => product.restaurantId === restaurant._id && product.categories.includes(category))" :key="idx" v-slot="{ active, toggle }">
                 <v-card outlined class="mx-auto" max-width="200">
                   <v-img :src="product.image" height="175px"/>
                   <v-card-title>{{ product.name }}</v-card-title>
@@ -30,7 +30,7 @@
                   <v-expand-transition>
                     <v-card v-if="active ? reveal=true : reveal=false" class="transition-fast-in-fast-out v-card--reveal" style="height: 100%;">
                       <v-card-title>{{ product.name }}</v-card-title>
-                      <v-card-subtitle>{{ product.description}}</v-card-subtitle>
+                      <v-card-subtitle v-if="product.description" class="text-justify">{{ product.description.slice(0, 142) + '...' }}</v-card-subtitle>
                       <v-card-actions class="pt-0">
                         <v-btn text color="primary" @click="toggle">Fermer</v-btn>
                       </v-card-actions>
