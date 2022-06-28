@@ -27,11 +27,11 @@ export default Vue.extend({
   }),
   computed: {
     viewsAvailable () {
-      const userRole = 'DELIVERY_MAN'
+      const userRole = this.$store.user?.roleId
       let viewsAvailable = []
 
       switch (userRole) {
-        case 'CUSTOMER':
+        case 1:
           viewsAvailable = [
             { isSetting: false, view: 'Restaurants', link: '/restaurants', mdi: 'mdi-silverware-fork-knife' },
             { isSetting: false, view: 'Panier', link: '/panier', mdi: 'mdi-cart' },
@@ -39,7 +39,7 @@ export default Vue.extend({
             { isSetting: true, view: 'Commandes', link: '/commandes', mdi: 'mdi-history' }
           ]
           break
-        case 'RESTAURANT_OWNER':
+        case 2:
           viewsAvailable = [
             { isSetting: false, view: 'Mon restaurant', link: '/mon-restaurant', mdi: 'mdi-silverware-fork-knife' },
             { isSetting: false, view: 'Commandes', link: '/commandes', mdi: 'mdi-application-edit' },
@@ -47,26 +47,26 @@ export default Vue.extend({
             { isSetting: true, view: 'Statistiques', link: '/statistiques', mdi: 'mdi-chart-line' }
           ]
           break
-        case 'DELIVERY_MAN':
+        case 3:
           viewsAvailable = [
             { isSetting: false, view: 'Livraisons', link: '/livraisons', mdi: 'mdi-bicycle' },
             { isSetting: true, view: 'Profil', link: '/profil', mdi: 'mdi-account-wrench' }
           ]
           break
-        case 'COMMERCIAL_DEPARTMENT':
+        case 4:
           viewsAvailable = [
             { isSetting: false, view: 'Comptes', link: '/comptes', mdi: 'mdi-account-multiple' },
             { isSetting: true, view: 'Profil', link: '/profil', mdi: 'mdi-account-wrench' },
             { isSetting: true, view: 'Statistiques', link: '/statistiques', mdi: 'mdi-chart-line' }
           ]
           break
-        case 'TECHNICAL_DEPARTMENT':
+        case 5:
           viewsAvailable = [
             { isSetting: true, view: 'Logs', link: '/logs', mdi: 'mdi-archive-arrow-up' },
             { isSetting: true, view: 'Composants', link: '/composants', mdi: 'mdi-archive-arrow-up' }
           ]
           break
-        case 'EXTERNAL':
+        case 6:
           viewsAvailable = [
             { isSetting: true, view: 'Composants', link: '/composants', mdi: 'mdi-archive-arrow-up' }
           ]

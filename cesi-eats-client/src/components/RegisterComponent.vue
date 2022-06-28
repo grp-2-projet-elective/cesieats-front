@@ -54,10 +54,12 @@
         </v-btn>
       </v-card-actions>
     </v-form>
+    <v-alert v-model="errorSnackbar" dense type="error">{{ errorSnackbarText }}</v-alert>
+    <v-alert v-model="successSnackbar" dense type="success">{{ successSnackbarText }}</v-alert>
   </v-card>
 </template>
 
-<script>
+<script lang="typescript">
 import axios from 'axios'
 
 export default {
@@ -110,11 +112,15 @@ export default {
       'Client',
       'Restaurateur',
       'Livreur'
-    ]
+    ],
+    errorSnackbar: false,
+    errorSnackbarText: '',
+    successSnackbar: false,
+    successSnackbarText: ''
   }),
   methods: {
     registerSubmit () {
-      console.log(this.user)
+      this.snackbar = false
       if (this.user.mail === '' || this.user.pwd === '' || (this.user.role === '' || this.user.role === null) || this.user.city === '' || this.user.zipCode === '' || this.user.address === '' || this.user.firstName === '' || this.user.lastName === '' || this.user.phone === '') {
         console.log('Please, specify all informations')
         return
@@ -122,8 +128,6 @@ export default {
       this.validate()
     },
     validate () {
-      console.log(this.user)
-      console.log('validate')
       let roleId = 0
       if (this.user.role === 'Client') roleId = 1
       if (this.user.role === 'Restaurateur') roleId = 2
@@ -141,17 +145,23 @@ export default {
         roleId: roleId
       }
 
-      axios.post('http://localhost:4000/api/v1/auth/register', requestBody).then(res => {
-        console.log(res)
+      axios.post('http://localhost:4000/api/v1/auth/register', requestBody).then((response, error) => {
+        if (error) {
+          this.snackbarText = error.response.data.error
+          this.snackbar = true
+          return
+        }
+        this.defineUser(response.data)
+        this.successSnackbarText = 'Registered'
+        this.successSnackbar = true
 
-        // axios.post('http://localhost:4000/api/v1/auth/login', { mail: this.user.mail, password: this.user.pwd }).then(res => {
-        //   console.log(res)
-        // }).catch(error => {
-        //   console.error(error)
-        // })
-      }).catch(error => {
-        console.error(error)
+        setTimeout(() => {
+          this.$router.push('/')
+        }, 500)
       })
+    },
+    defineUser (user) {
+      this.$store.commit('defineUser', user)
     }
   }
 }
