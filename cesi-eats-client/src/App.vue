@@ -27,9 +27,9 @@ export default Vue.extend({
   }),
   computed: {
     viewsAvailable () {
-      const userRole = this.$store.user?.roleId
       let viewsAvailable = []
 
+      const userRole = this.$store.user?.roleId
       switch (userRole) {
         case 1:
           viewsAvailable = [

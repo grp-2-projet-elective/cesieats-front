@@ -6,13 +6,17 @@ import CustomerView from '../views/roles/CustomerView.vue'
 import RestaurantOwnerView from '../views/roles/RestaurantOwnerView.vue'
 import DeliveryManView from '../views/roles/DeliveryManView.vue'
 import RestaurantsView from '../views/shop/RestaurantsView.vue'
+import MyRestaurantView from '../views/restaurantOwner/MyRestaurantView.vue'
 import ProductsView from '../views/shop/ProductsView.vue'
 import CartView from '../views/shop/CartView.vue'
 import OrdersView from '../views/shop/OrdersView.vue'
 import DeliveriesView from '../views/shop/DeliveriesView.vue'
-import ComposantsView from '../views/ComposantsView.vue'
+import ComponentsView from '../views/ComponentsView.vue'
 import HelpView from '../views/HelpView.vue'
-import MyRestaurantView from '../views/restaurantOwner/MyRestaurantView.vue'
+import LegalNoticeView from '../views/mandatory/LegalNoticeView.vue'
+import TOUView from '../views/mandatory/TOUView.vue'
+import GTCView from '../views/mandatory/GTCView.vue'
+import PrivacyPolicyView from '../views/mandatory/PrivacyPolicyView.vue'
 
 Vue.use(VueRouter)
 
@@ -52,6 +56,11 @@ const routes: Array<RouteConfig> = [
     name: 'products',
     component: ProductsView
   },
+  }
+    path: '/mon-restaurant/:id/:name',
+    name: 'restaurant',
+    component: MyRestaurantView
+  },
   {
     path: '/panier',
     name: 'panier',
@@ -70,7 +79,7 @@ const routes: Array<RouteConfig> = [
   {
     path: '/composants',
     name: 'composants',
-    component: ComposantsView
+    component: ComponentsView
   },
   {
     path: '/aide',
@@ -78,9 +87,24 @@ const routes: Array<RouteConfig> = [
     component: HelpView
   },
   {
-    path: '/mon-restaurant/:id/:name',
-    name: 'restaurant',
-    component: MyRestaurantView
+    path: '/mentions-legales',
+    name: 'mentions-legales',
+    component: LegalNoticeView
+  },
+  {
+    path: '/cgu',
+    name: 'cgu',
+    component: TOUView
+  },
+  {
+    path: '/cgv',
+    name: 'cgv',
+    component: GTCView
+  },
+  {
+    path: '/politique-confidentialite',
+    name: 'politique-confidentialite',
+    component: PrivacyPolicyView
   }
 ]
 
