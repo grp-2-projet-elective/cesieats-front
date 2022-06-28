@@ -17,6 +17,7 @@ import LegalNoticeView from '../views/mandatory/LegalNoticeView.vue'
 import TOUView from '../views/mandatory/TOUView.vue'
 import GTCView from '../views/mandatory/GTCView.vue'
 import PrivacyPolicyView from '../views/mandatory/PrivacyPolicyView.vue'
+import ProfileView from '../views/ProfileView.vue'
 
 Vue.use(VueRouter)
 
@@ -30,6 +31,11 @@ const routes: Array<RouteConfig> = [
     path: '/inscription',
     name: 'inscription',
     component: RegisterView
+  },
+  {
+    path: '/profil/:userID',
+    name: 'profile',
+    component: ProfileView
   },
   {
     path: '/client',
