@@ -3,10 +3,10 @@
     <v-container>
       <h3>Menus</h3>
       <v-row>
-        <v-col style="height: 350px;">
+        <v-col style="height: 410px;">
           <v-sheet class="mx-auto" width="100%">
             <v-slide-group v-model="model" class="pa-4" multiple show-arrows>
-              <v-slide-item v-for="(menu, idx) in menus" :key="idx" v-slot="{ active, toggle }">
+              <v-slide-item v-for="(menu, idx) in menus.filter(menu => menu.restaurantId === restaurant._id)" :key="idx" v-slot="{ active, toggle }">
                 <v-card outlined class="mx-auto" max-width="200">
                   <v-img :src="menu.image" height="175px"/>
                   <v-card-title>
@@ -14,8 +14,9 @@
                   </v-card-title>
                   <v-card-subtitle>{{ menu.price }} €</v-card-subtitle>
                   <v-card-actions>
-                    <v-btn text color="primary" @click="toggle">En savoir plus</v-btn>
+                    <v-btn text color="primary" @click="toggle">Découvrir</v-btn>
                     <v-spacer></v-spacer>
+                    
                     <v-btn v-if="!modif" icon class="mr-1">
                       <v-icon color="primary">mdi-plus-circle</v-icon>
                     </v-btn>
@@ -67,24 +68,33 @@
                         </v-card>
                       </v-dialog>
                     </v-btn>
+                    
+                    <div class="quantity-container">
+                      <input class="quantity-input" type="number" :value="fetchQuantity(menu)" disabled/>
+                    </div>
+                    <v-spacer></v-spacer>
+                    <div class="actions-container">
+                      <v-btn icon class="mr-1" @click="addToCart(menu)">
+                        <v-icon color="primary">mdi-plus-circle</v-icon>
+                      </v-btn>
+                      <v-btn icon class="mr-1" @click="removeFromCart(menu)">
+                        <v-icon color="primary">mdi-minus-circle</v-icon>
+                      </v-btn>
+                    </div>
+                    
                   </v-card-actions>
                   <v-expand-transition>
                     <v-card v-if="active ? reveal=true : reveal=false" class="transition-fast-in-fast-out v-card--reveal" style="height: 100%;">
                       <v-card-title>{{ menu.name }}</v-card-title>
-                      <v-card-subtitle>
-                        {{ menu.description}}
-                        <br/><br/>
+                      <v-card-subtitle class="text-justify">
+                        <p v-if="menu.description">{{ menu.description.slice(0, 142) + '...' }}</p>
                         Produits disponibles:
-                        <ul v-for="product in productsFromMenu" :key="product">
+                        <ul v-for="product in productsFromMenu" :key="product.name">
                           <li>{{ product.name }}</li>
                         </ul>
                       </v-card-subtitle>
                       <v-card-actions class="pt-0">
                         <v-btn text color="primary" @click="toggle">Fermer</v-btn>
-                        <v-spacer></v-spacer>
-                        <v-btn icon class="mr-1">
-                          <v-icon color="primary">mdi-plus-circle</v-icon>
-                        </v-btn>
                       </v-card-actions>
                     </v-card>
                   </v-expand-transition>
@@ -99,18 +109,38 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
   name: 'MenusComponent',
   props: {
     menus: Array,
     modif: Boolean,
     productsList: Array
+
+    restaurant: Object,
+    menus: Array
   },
   data: () => ({
     model: [],
     reveal: false,
     dialog: false
   }),
+  methods: {
+    addToCart (item) {
+      this.$store.commit('addToCart', item)
+    },
+    removeFromCart (item) {
+      this.$store.commit('removeFromCart', item)
+    },
+    fetchQuantity (item) {
+      const mp = this.cart.cart.find(mp => mp.id === item.id && mp.name === item.name)
+      if (mp) {
+        return mp.quantity
+      }
+      return 0
+    }
+  },
   computed: {
     productsFromMenu () {
       return [
@@ -118,7 +148,10 @@ export default {
         { name: '2' },
         { name: '3' }
       ]
-    }
+    },
+    ...mapState([
+      'cart'
+    ])
   }
 }
 </script>
@@ -129,5 +162,25 @@ export default {
   bottom: 0;
   width: 100%;
   opacity: 1 !important;
+}
+#menus-component .quantity-container {
+  width: 30%;
+}
+#menus-component .quantity-input {
+  width: 100%;
+  text-align: center;
+  padding: 5px 10px;
+  transform: translate(10px, -2px);
+  outline: none;
+}
+#menus-component .quantity-input::-webkit-inner-spin-button, #menus-component .quantity-input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+#menus-component .quantity-input {
+  -moz-appearance: textfield;
+}
+#menus-component .actions-container {
+  text-align: center;
 }
 </style>

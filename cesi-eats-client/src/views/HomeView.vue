@@ -12,7 +12,6 @@ import RolesComponent from '@/components/home/RolesComponent.vue'
 
 export default Vue.extend({
   name: 'HomeView',
-
   components: {
     LeaderboardComponent,
     RolesComponent
