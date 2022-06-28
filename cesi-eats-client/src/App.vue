@@ -27,7 +27,7 @@ export default Vue.extend({
   }),
   computed: {
     viewsAvailable () {
-      const userRole = 'CUSTOMER'
+      const userRole = 'DELIVERY_MAN'
       let viewsAvailable = []
 
       switch (userRole) {
@@ -36,7 +36,7 @@ export default Vue.extend({
             { isSetting: false, view: 'Restaurants', link: '/restaurants', mdi: 'mdi-silverware-fork-knife' },
             { isSetting: false, view: 'Panier', link: '/panier', mdi: 'mdi-cart' },
             { isSetting: true, view: 'Profil', link: '/profil', mdi: 'mdi-account-wrench' },
-            { isSetting: true, view: 'Historique', link: '/commandes', mdi: 'mdi-history' }
+            { isSetting: true, view: 'Commandes', link: '/commandes', mdi: 'mdi-history' }
           ]
           break
         case 'RESTAURANT_OWNER':

@@ -9,6 +9,7 @@ import RestaurantsView from '../views/shop/RestaurantsView.vue'
 import ProductsView from '../views/shop/ProductsView.vue'
 import CartView from '../views/shop/CartView.vue'
 import OrdersView from '../views/shop/OrdersView.vue'
+import DeliveriesView from '../views/shop/DeliveriesView.vue'
 import ComposantsView from '../views/ComposantsView.vue'
 import HelpView from '../views/HelpView.vue'
 
@@ -46,7 +47,7 @@ const routes: Array<RouteConfig> = [
     component: RestaurantsView
   },
   {
-    path: '/restaurants/:id/:name',
+    path: '/restaurants/:name/:id',
     name: 'products',
     component: ProductsView
   },
@@ -59,6 +60,11 @@ const routes: Array<RouteConfig> = [
     path: '/commandes',
     name: 'commandes',
     component: OrdersView
+  },
+  {
+    path: '/livraisons',
+    name: 'livraisons',
+    component: DeliveriesView
   },
   {
     path: '/composants',

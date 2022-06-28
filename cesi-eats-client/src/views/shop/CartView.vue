@@ -9,7 +9,7 @@
               <a href="/restaurants" title="Les restaurants">les restaurants</a>
             </v-card-subtitle>
           </v-card>
-          <v-card outlined v-for="(restaurant, idx) in getAllRestaurants" :key="idx" class="mx-auto mb-5">
+          <v-card outlined v-for="restaurant in getAllRestaurants" :key="restaurant._id" class="mx-auto mb-5">
             <v-row class="mt-1 mb-1">
               <v-col sm="3">
                 <v-img class="ml-4" :src="restaurant.image" :alt="restaurant.name" height="100%"/>
@@ -17,7 +17,7 @@
               <v-col sm="9">
                 <div class="restaurant-theme">
                   <v-card-title>
-                    <a class="text-decoration-none" :href="/restaurants/ + restaurant.id + '/' + nameForUrl(restaurant.name) ">
+                    <a class="text-decoration-none" :href="/restaurants/ + nameForUrl(restaurant.name) + '/' + restaurant._id">
                       {{ restaurant.name }}
                     </a>
                   </v-card-title>
@@ -40,8 +40,7 @@
                   </v-btn>
                   <v-spacer></v-spacer>
                   <v-btn color="primary" text class="mr-4">
-                    Valider
-                    <v-icon color="primary" class="ml-1">mdi-check-circle</v-icon>
+                    <ValidateCartComponent :restaurant="restaurant" :cart="cart.filter(item => item.restaurantId === restaurant._id)" :total-price="totalPrice"/>
                   </v-btn>
                   <v-btn color="error" text class="mr-4" @click="removeAllFromCart(restaurant)">
                     Supprimer
@@ -64,11 +63,11 @@
                         </tr>
                         </thead>
                         <tbody>
-                          <tr v-for="item in cart.filter(item => item.restaurantId === restaurant.id)" :key="item.id">
+                          <tr v-for="item in cart.filter(item => item.restaurantId === restaurant._id)" :key="item.id">
                             <td>{{ item.name }}</td>
                             <td class="text-center">{{ item.quantity }}</td>
                             <td class="text-center">{{ item.price }} €</td>
-                            <td class="text-center">{{ item.quantity * item.price }} €</td>
+                            <td class="text-center">{{ (item.quantity * item.price).toFixed(2) }} €</td>
                             <td class="text-center">
                               <v-btn icon @click="removeFromCart(item)">
                                 <v-icon color="primary">mdi-minus-circle</v-icon>
@@ -102,46 +101,18 @@
 
 <script>
 import $store from '@/store/cart'
+import axios from 'axios'
+import ValidateCartComponent from '@/components/shop/ValidateCartComponent'
 
 export default {
   name: 'CartView',
+  components: {
+    ValidateCartComponent
+  },
   data: () => ({
     show: false,
     cart: $store.state.cart,
-    restaurants: [
-      {
-        id: 0,
-        name: 'Lorem Ipsum',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ultrices fringilla justo, ut pellentesque diam pulvinar id. Sed pretium diam id elit mattis, sed vehicula dolor tempor. Sed sagittis arcu id orci commodo feugiat. In hac habitasse platea dictumst. Interdum et malesuada fames ac ante ipsum primis in faucibus. Donec sit amet euismod mi. Etiam condimentum magna sed nisi interdum, id fringilla nibh blandit. Nulla fringilla gravida mi at fermentum.',
-        image: 'https://media-cdn.tripadvisor.com/media/photo-s/1a/18/3a/cb/restaurant-le-47.jpg',
-        categories: ['Japonais', 'Healthy'],
-        restaurantOwnersId: [42],
-        openingHours: '9h - 12h / 14h - 19h',
-        location: {
-          city: 'Guérande',
-          zipCode: '42024',
-          address: '42 rue du Lorem',
-          latitude: 42,
-          longitude: 24
-        }
-      },
-      {
-        id: 1,
-        name: 'Test rien à voir',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ultrices fringilla justo, ut pellentesque diam pulvinar id. Sed pretium diam id elit mattis, sed vehicula dolor tempor. Sed sagittis arcu id orci commodo feugiat. In hac habitasse platea dictumst. Interdum et malesuada fames ac ante ipsum primis in faucibus. Donec sit amet euismod mi. Etiam condimentum magna sed nisi interdum, id fringilla nibh blandit. Nulla fringilla gravida mi at fermentum.',
-        image: 'https://media-cdn.tripadvisor.com/media/photo-s/1a/18/3a/cb/restaurant-le-47.jpg',
-        categories: ['Japonais', 'Healthy'],
-        restaurantOwnersId: [42],
-        openingHours: '9h - 12h / 14h - 19h',
-        location: {
-          city: 'Saint-Nazaire',
-          zipCode: '42024',
-          address: '42 rue du Lorem',
-          latitude: 42,
-          longitude: 24
-        }
-      }
-    ]
+    restaurants: []
   }),
   methods: {
     nameForUrl (name) {
@@ -163,8 +134,9 @@ export default {
     getAllRestaurants () {
       const restaurants = []
       for (let i = 0; i < this.cart.length; i++) {
-        if (!restaurants.includes(this.restaurants[this.cart[i].restaurantId])) {
-          restaurants.push(this.restaurants[this.cart[i].restaurantId])
+        const restaurant = this.restaurants.find(restaurant => restaurant._id === this.cart[i].restaurantId)
+        if (restaurant && !restaurants.includes(restaurant)) {
+          restaurants.push(restaurant)
         }
       }
       return restaurants
@@ -174,8 +146,13 @@ export default {
       for (const item of this.cart) {
         totalPrice += item.totalPrice
       }
-      return totalPrice.toString()
+      return totalPrice.toFixed(2)
     }
+  },
+  mounted () {
+    axios.get('http://localhost:4200/api/v1/restaurants/')
+      .then(response => (this.restaurants = response.data))
+      .catch(error => console.log(error))
   }
 }
 </script>
