@@ -1,110 +1,67 @@
 <template>
-      <v-card id="v-card" max-width="90%" class="mx-auto">
+  <v-card id="v-card" max-width="90%" class="mx-auto">
+    <v-card-title>
+      <span class="text-h4">Inscription</span>
+    </v-card-title>
+    <v-form ref="registerForm" @submit.prevent="registerSubmit" lazy-validation>
+      <v-container>
+        <v-row>
+          <v-col cols="4" md="2">
+            <v-select v-model="user.role" :items="roles" :rules="roleRules" label="Rôle*" required></v-select>
+          </v-col>
+        </v-row>
         <v-card-title>
-          <span class="text-h4">Inscription</span>
+          <span class="text-h6">Données personnelles</span>
         </v-card-title>
-        <v-form
-            v-model="validate"
-            ref="registerForm"
-            @submit.prevent="registerSubmit"
-            lazy-validation
-        >
-          <v-container>
-            <v-row>
-             <v-col cols="4" md="2">
-              <v-select
-                v-model="user.role"
-                :items="roles"
-                :rules="roleRules"
-                label="Rôle*"
-                required
-              ></v-select>
-            </v-col>
-            </v-row>
-            <v-card-title>
-              <span class="text-h6">Données personnelles</span>
-            </v-card-title>
-            <v-row>
-              <v-col cols="12" md="6">
-                <v-text-field
-                    v-model="user.firstName"
-                    :rules="firstNameRules"
-                    label="Prénom*"
-                ></v-text-field>
-              </v-col>
-              <v-col cols="12" md="6">
-                <v-text-field
-                    v-model="user.lastName"
-                    :rules="lastNameRules"
-                    label="Nom*"
-                ></v-text-field>
-              </v-col>
-              <v-col cols="12" md="6">
-                <v-text-field
-                    v-model="user.mail"
-                    :rules="emailRules"
-                    label="E-mail*"
-                ></v-text-field>
-              </v-col>
-              <v-col cols="12" md="6">
-                <v-text-field
-                    v-model="user.phone"
-                    :rules="phoneRules"
-                    label="Téléphone*"
-                ></v-text-field>
-              </v-col>
-              <v-col cols="6" md="4">
-                <v-text-field
-                    v-model="user.pwd"
-                    :rules="passwordRules"
-                    label="Mot de passe*"
-                    :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-                    :type="show1 ? 'text' : 'password'"
-                    @click:append="show1 = !show1"
-                ></v-text-field>
-              </v-col>
-            </v-row>
-            <v-card-title>
-              <span class="text-h6">Informations de livraison par défaut</span>
-            </v-card-title>
-            <v-row>
-              <v-col cols="12" md="4">
-                <v-text-field
-                    v-model="user.city"
-                    label="Ville"
-                ></v-text-field>
-              </v-col>
-              <v-col cols="12" md="6">
-                <v-text-field
-                    v-model="user.address"
-                    label="Adresse"
-                ></v-text-field>
-              </v-col>
-              <v-col cols="4" md="2">
-                <v-text-field
-                    v-model="user.zipCode"
-                    label="Code postal"
-                    :rules="zipRules"
-                ></v-text-field>
-              </v-col>
-            </v-row>
-          </v-container>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn
-            color="primary"
-            class="mr-4"
-            type="submit"
-            @click="validate"
-            >
-            Enregistrer
-            </v-btn>
-        </v-card-actions>
-        </v-form>
-      </v-card>
+        <v-row>
+          <v-col cols="12" md="6">
+            <v-text-field v-model="user.firstName" :rules="firstNameRules" label="Prénom*"></v-text-field>
+          </v-col>
+          <v-col cols="12" md="6">
+            <v-text-field v-model="user.lastName" :rules="lastNameRules" label="Nom*"></v-text-field>
+          </v-col>
+          <v-col cols="12" md="6">
+            <v-text-field v-model="user.mail" :rules="emailRules" label="E-mail*"></v-text-field>
+          </v-col>
+          <v-col cols="12" md="6">
+            <v-text-field v-model="user.phone" :rules="phoneRules" label="Téléphone*"></v-text-field>
+          </v-col>
+          <v-col cols="6" md="4">
+            <v-text-field v-model="user.pwd" :rules="passwordRules" label="Mot de passe*"
+              :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" :type="show1 ? 'text' : 'password'"
+              @click:append="show1 = !show1"></v-text-field>
+          </v-col>
+        </v-row>
+        <v-card-title>
+          <span class="text-h6">Informations de livraison par défaut</span>
+        </v-card-title>
+        <v-row>
+          <v-col cols="12" md="4">
+            <v-text-field v-model="user.city" label="Ville*" :rules="cityRules"></v-text-field>
+          </v-col>
+          <v-col cols="12" md="6">
+            <v-text-field v-model="user.address" label="Adresse*" :rules="addressRules"></v-text-field>
+          </v-col>
+          <v-col cols="4" md="2">
+            <v-text-field v-model="user.zipCode" label="Code postal*" :rules="zipRules"></v-text-field>
+          </v-col>
+        </v-row>
+      </v-container>
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn color="primary" class="mr-4" type="submit">
+          Enregistrer
+        </v-btn>
+      </v-card-actions>
+    </v-form>
+    <v-alert v-model="errorSnackbar" dense type="error">{{ errorSnackbarText }}</v-alert>
+    <v-alert v-model="successSnackbar" dense type="success">{{ successSnackbarText }}</v-alert>
+  </v-card>
 </template>
 
-<script>
+<script lang="typescript">
+import axios from 'axios'
+
 export default {
   name: 'RegisterComponent',
   data: () => ({
@@ -129,7 +86,14 @@ export default {
       v => !!v || 'Veuillez renseigner votre numéro de téléphone',
       v => /^(0|\+33)[1-9]([-. ]?[0-9]{2}){4}$/.test(v) || 'Format incorrect (+33xx ou 0xx)'
     ],
+    cityRules: [
+      v => !!v || 'Veuillez renseigner votre ville'
+    ],
+    addressRules: [
+      v => !!v || 'Veuillez renseigner votre addresse'
+    ],
     zipRules: [
+      v => !!v || 'Veuillez renseigner votre code postal',
       v => /[0-9].*$/.test(v) || 'Format incorrect'
     ],
     user: {
@@ -148,13 +112,56 @@ export default {
       'Client',
       'Restaurateur',
       'Livreur'
-    ]
+    ],
+    errorSnackbar: false,
+    errorSnackbarText: '',
+    successSnackbar: false,
+    successSnackbarText: ''
   }),
   methods: {
     registerSubmit () {
-      if (this.$refs.registerForm.validate()) {
-        this.$refs.registerForm.reset()
+      this.snackbar = false
+      if (this.user.mail === '' || this.user.pwd === '' || (this.user.role === '' || this.user.role === null) || this.user.city === '' || this.user.zipCode === '' || this.user.address === '' || this.user.firstName === '' || this.user.lastName === '' || this.user.phone === '') {
+        console.log('Please, specify all informations')
+        return
       }
+      this.validate()
+    },
+    validate () {
+      let roleId = 0
+      if (this.user.role === 'Client') roleId = 1
+      if (this.user.role === 'Restaurateur') roleId = 2
+      if (this.user.role === 'Livreur') roleId = 3
+
+      const requestBody = {
+        firstname: this.user.firstName,
+        lastname: this.user.lastName,
+        mail: this.user.mail,
+        city: this.user.city,
+        zipCode: this.user.zipCode,
+        address: this.user.address,
+        phone: this.user.phone,
+        password: this.user.pwd,
+        roleId: roleId
+      }
+
+      axios.post('http://localhost:4000/api/v1/auth/register', requestBody).then((response, error) => {
+        if (error) {
+          this.snackbarText = error.response.data.error
+          this.snackbar = true
+          return
+        }
+        this.defineUser(response.data)
+        this.successSnackbarText = 'Registered'
+        this.successSnackbar = true
+
+        setTimeout(() => {
+          this.$router.push('/')
+        }, 500)
+      })
+    },
+    defineUser (user) {
+      this.$store.commit('defineUser', user)
     }
   }
 }
@@ -162,6 +169,6 @@ export default {
 
 <style scoped>
 #v-card {
-    margin-top: 20px;
+  margin-top: 20px;
 }
 </style>
