@@ -9,13 +9,68 @@
               <v-slide-item v-for="(product, idx) in products.filter(product => product.categories.includes(category))" :key="idx" v-slot="{ active, toggle }">
                 <v-card outlined class="mx-auto" max-width="200">
                   <v-img :src="product.image" height="175px"/>
-                  <v-card-title>{{ product.name }}</v-card-title>
+                  <v-card-title>
+                    {{ product.name }}
+                  </v-card-title>
                   <v-card-subtitle>{{ product.price }} €</v-card-subtitle>
                   <v-card-actions>
                     <v-btn text color="primary" @click="toggle">En savoir plus</v-btn>
                     <v-spacer></v-spacer>
-                    <v-btn icon class="mr-1">
+                    <v-btn v-if="!modif" icon class="mr-1">
                       <v-icon color="primary">mdi-plus-circle</v-icon>
+                    </v-btn>
+                    <v-btn v-else icon class="mr-1">
+                      <v-dialog v-model="dialog" max-width="50%">
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-btn color="primary" class="mx-2" icon fab small v-bind="attrs" v-on="on">
+                            <v-icon>
+                              mdi-pencil
+                            </v-icon>
+                          </v-btn>
+                        </template>
+                        <v-card>
+                          <v-card-title>
+                            <span class="text-h4">{{product.name}}</span>
+                          </v-card-title>
+                          <v-form v-model="validate" ref="myRestaurantForm" @submit="connectionSubmit">
+                            <v-container>
+                              <v-row>
+                                <v-col cols="12" md="5">
+                                  <v-text-field v-model="product.name" label="Intitulé du produit"/>
+                                </v-col>
+                                <v-col cols="12" md="12">
+                                  <v-textarea v-model="product.description" label="Description du produit"/>
+                                </v-col>
+                                <v-col cols="12" md="4">
+                                  <v-text-field v-model="product.price" label="Prix du produit" type="number"/>
+                                </v-col>
+                                <v-col cols="12" md="4">
+                                  <v-text-field v-model="product.categories" label="Categorie(s)" multiple/>
+                                </v-col>
+                                <v-col cols="8" md="8">
+                                  <v-text-field v-model="product.image" label="URL de l'image"/>
+                                </v-col>
+                                <v-col cols="8" md="8">
+                                  <v-checkbox v-model="product.isOutOfStock" label="Rupture de stock ?" required/>
+                                </v-col>
+                              </v-row>
+                            </v-container>
+                            <v-card-actions>
+                              <v-spacer></v-spacer>
+                              <v-btn @click="dialog=false">
+                                Fermer
+                              </v-btn>
+                              <v-btn @click="cancelButtonClick" color="error">
+                                <v-icon>mdi-delete</v-icon>
+                                Supprimer
+                              </v-btn>
+                              <v-btn color="primary" class="mr-4" type="submit" @click="validate">
+                                Enregistrer
+                              </v-btn>
+                            </v-card-actions>
+                          </v-form>
+                        </v-card>
+                      </v-dialog>
                     </v-btn>
                   </v-card-actions>
                   <v-expand-transition>
@@ -46,11 +101,13 @@ export default {
   name: 'ProductsComponent',
   props: {
     products: Array,
-    category: String
+    category: String,
+    modif: Boolean
   },
   data: () => ({
     model: [],
-    reveal: false
+    reveal: false,
+    dialog: false
   })
 }
 </script>

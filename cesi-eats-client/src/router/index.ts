@@ -8,6 +8,7 @@ import DeliveryManView from '../views/roles/DeliveryManView.vue'
 import RestaurantsView from '../views/shop/RestaurantsView.vue'
 import ProductsView from '../views/shop/ProductsView.vue'
 import HelpView from '../views/HelpView.vue'
+import MyRestaurantView from '../views/restaurantOwner/MyRestaurantView.vue'
 
 Vue.use(VueRouter)
 
@@ -51,6 +52,11 @@ const routes: Array<RouteConfig> = [
     path: '/aide',
     name: 'aide',
     component: HelpView
+  },
+  {
+    path: '/mon-restaurant/:id/:name',
+    name: 'restaurant',
+    component: MyRestaurantView
   }
 ]
 
