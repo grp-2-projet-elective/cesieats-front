@@ -35,15 +35,28 @@
 
       <v-divider></v-divider>
 
+      <div id="mandatory" class="mt-5 mb-5">
+        <v-btn link color="primary" :to="{ name: 'mentions-legales' }">
+          <span class="mr-2">Mentions légales</span>
+        </v-btn>
+        <v-btn link color="primary" :to="{ name: 'cgu' }">
+          <span class="mr-2">Conditions Générales d'Utilisation</span>
+        </v-btn>
+        <v-btn link color="primary" :to="{ name: 'cgv' }">
+          <span class="mr-2">Conditions Générales de Vente</span>
+        </v-btn>
+        <v-btn link color="primary" :to="{ name: 'politique-confidentialite' }">
+          <span class="mr-2">Politique de confidentialité</span>
+        </v-btn>
+      </div>
+
+      <v-divider></v-divider>
+
       <v-card-text class="white--text pb-0">
         <strong>CESI Eats</strong> - {{ new Date().getFullYear() }}
       </v-card-text>
       <v-card-text class="pt-0">
-        <v-btn icon
-               v-for="icon in icons"
-               :key="icon"
-               class="mx-4 white--text"
-        >
+        <v-btn icon v-for="icon in icons" :key="icon" class="mx-4 white--text">
           <v-icon size="24px">{{ icon }}</v-icon>
         </v-btn>
       </v-card-text>
@@ -80,10 +93,10 @@ export default {
 #logo h2 {
   color: black;
 }
-#links {
+#links, #mandatory {
   display: block;
 }
-#links a {
+#links a , #mandatory a {
   box-shadow: none;
 }
 </style>

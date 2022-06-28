@@ -30,7 +30,7 @@ export default {
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: url('@/assets/home/leaderboard.jpg');
+  background-image: url('@/assets/views/leaderboard.jpg');
   background-size: cover;
 }
 #search-restaurant {

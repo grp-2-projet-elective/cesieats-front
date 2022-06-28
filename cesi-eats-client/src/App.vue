@@ -27,7 +27,7 @@ export default Vue.extend({
   }),
   computed: {
     viewsAvailable () {
-      const userRole = 'DELIVERY_MAN'
+      const userRole = 'CUSTOMER'
       let viewsAvailable = []
 
       switch (userRole) {
