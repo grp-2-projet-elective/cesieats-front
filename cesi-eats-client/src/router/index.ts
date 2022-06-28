@@ -56,7 +56,7 @@ const routes: Array<RouteConfig> = [
     name: 'products',
     component: ProductsView
   },
-  }
+  {
     path: '/mon-restaurant/:id/:name',
     name: 'restaurant',
     component: MyRestaurantView

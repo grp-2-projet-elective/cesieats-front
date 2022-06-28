@@ -1,6 +1,6 @@
 <template>
   <div id="roles-component">
-    <v-container class="pr-0 pl-0">
+    <v-container class="pr-0 pl-0 mb-5">
       <v-row>
         <v-col xs="12" sm="6" lg="4">
           <a href="/client" title="Client">

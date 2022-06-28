@@ -16,7 +16,7 @@
                   <v-card-actions>
                     <v-btn text color="primary" @click="toggle">Découvrir</v-btn>
                     <v-spacer></v-spacer>
-                    
+
                     <v-btn v-if="!modif" icon class="mr-1">
                       <v-icon color="primary">mdi-plus-circle</v-icon>
                     </v-btn>
@@ -68,7 +68,7 @@
                         </v-card>
                       </v-dialog>
                     </v-btn>
-                    
+
                     <div class="quantity-container">
                       <input class="quantity-input" type="number" :value="fetchQuantity(menu)" disabled/>
                     </div>
@@ -81,7 +81,7 @@
                         <v-icon color="primary">mdi-minus-circle</v-icon>
                       </v-btn>
                     </div>
-                    
+
                   </v-card-actions>
                   <v-expand-transition>
                     <v-card v-if="active ? reveal=true : reveal=false" class="transition-fast-in-fast-out v-card--reveal" style="height: 100%;">
@@ -114,12 +114,10 @@ import { mapState } from 'vuex'
 export default {
   name: 'MenusComponent',
   props: {
-    menus: Array,
-    modif: Boolean,
-    productsList: Array
-
     restaurant: Object,
-    menus: Array
+    menus: Array,
+    productsList: Array,
+    modif: Boolean
   },
   data: () => ({
     model: [],

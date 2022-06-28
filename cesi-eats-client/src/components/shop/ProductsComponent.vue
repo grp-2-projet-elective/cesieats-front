@@ -86,7 +86,7 @@
                         <v-icon color="primary">mdi-minus-circle</v-icon>
                       </v-btn>
                     </div>
-                    
+
                   </v-card-actions>
                   <v-expand-transition>
                     <v-card v-if="active ? reveal=true : reveal=false" class="transition-fast-in-fast-out v-card--reveal" style="height: 100%;">
