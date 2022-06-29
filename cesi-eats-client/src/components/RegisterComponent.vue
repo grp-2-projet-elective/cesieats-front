@@ -3,7 +3,7 @@
     <v-card-title>
       <span class="text-h4">Inscription</span>
     </v-card-title>
-    <v-form ref="registerForm" @submit.prevent="registerSubmit" lazy-validation>
+    <v-form v-model="isValid" ref="registerForm" @submit.prevent="registerSubmit">
       <v-container>
         <v-row>
           <v-col cols="4" md="2">
@@ -45,11 +45,19 @@
           <v-col cols="4" md="2">
             <v-text-field v-model="user.zipCode" label="Code postal*" :rules="zipRules"></v-text-field>
           </v-col>
+          <v-col cols="12" md="6">
+<!--            -->
+            <v-checkbox :rules="mandatory">
+              <div slot="label" @click.stop>
+                J'ai lu et j'accepte les <a href="/cgv" title="CGV">CGV</a> et <a href="/cgu" title="CGU">CGU</a>.
+              </div>
+            </v-checkbox>
+          </v-col>
         </v-row>
       </v-container>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn color="primary" class="mr-4" type="submit">
+        <v-btn color="primary" class="mr-4" type="submit" :disabled="!isValid">
           Enregistrer
         </v-btn>
       </v-card-actions>
@@ -65,6 +73,7 @@ import axios from 'axios'
 export default {
   name: 'RegisterComponent',
   data: () => ({
+    isValid: false,
     firstNameRules: [
       v => !!v || 'Veuillez renseigner votre prénom'
     ],
@@ -95,6 +104,9 @@ export default {
     zipRules: [
       v => !!v || 'Veuillez renseigner votre code postal',
       v => /[0-9].*$/.test(v) || 'Format incorrect'
+    ],
+    mandatory: [
+      v => !!v || 'Veuillez accepter les conditions'
     ],
     user: {
       mail: '',

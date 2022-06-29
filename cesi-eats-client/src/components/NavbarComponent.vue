@@ -14,6 +14,12 @@
     <div v-if="viewsAvailable[0].view === 'Connexion'">
       <LoginComponent/>
     </div>
+    <div v-if="viewsAvailable[0].view === 'Connexion'">
+      <v-btn class="reponsive-navbar" link v-for="view in viewsAvailable.filter(view => !view.isSetting && view.view === 'Inscription')" :key="view.view" :to="view.link">
+        <v-icon class="mr-1">{{ view.mdi }}</v-icon>
+        <span class="mr-1">{{ view.view }}</span>
+      </v-btn>
+    </div>
 
     <div v-if="viewsAvailable[0].view !== 'Connexion'">
       <v-btn class="reponsive-navbar" link v-for="view in viewsAvailable.filter(view => !view.isSetting)" :key="view.view" :to="view.link">

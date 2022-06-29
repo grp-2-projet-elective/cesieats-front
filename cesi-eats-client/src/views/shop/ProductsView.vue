@@ -3,10 +3,10 @@
     <v-container class="pr-0 pl-0">
       <h2>Notre sélection chez {{ restaurant.name }}</h2>
       <v-row>
-        <MenusComponent class="mt-3" v-if="checkMenusByRestaurant" :restaurant="restaurant" :menus="menus"/>
+        <MenusComponent class="mt-3" v-if="checkMenusByRestaurant" :restaurant="restaurant" :menus="menus" :modif="false"/>
       </v-row>
       <v-row v-for="category in getAllCategories" :key="category">
-        <ProductsComponent class="mt-3" v-if="checkProductsByRestaurant(category)" :restaurant="restaurant" :products="products" :category="category"/>
+        <ProductsComponent class="mt-3" v-if="checkProductsByRestaurant(category)" :restaurant="restaurant" :products="products" :category="category" :modif="false"/>
       </v-row>
     </v-container>
   </div>

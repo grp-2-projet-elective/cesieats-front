@@ -1,36 +1,36 @@
 <template>
-    <v-dialog v-model="validateCartDialog" max-width="600px">
-      <template v-slot:activator="{ on, attrs }">
-        <v-btn v-bind="attrs" v-on="on" color="primary">Valider mon panier</v-btn>
-      </template>
-      <v-card>
-        <v-card-title>
-          <span class="text-h4">Valider mon panier</span>
-        </v-card-title>
-        <v-form ref="form" v-model="validCart" @submit.prevent="validateCartSubmit">
-          <v-container>
-            <v-row>
-              <v-col cols="6">
-                <v-text-field v-model="order.location.city" :rules="rules.city" label="Ville"></v-text-field>
-              </v-col>
-              <v-col cols="6">
-                <v-text-field v-model="order.location.zipCode" :rules="rules.zipCode" label="Code postal"></v-text-field>
-              </v-col>
-            </v-row>
-            <v-row>
-              <v-col cols="12">
-                <v-text-field v-model="order.location.address" :rules="rules.address" label="Adresse"></v-text-field>
-              </v-col>
-            </v-row>
-          </v-container>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn @click="cancelButtonClick">Fermer</v-btn>
-            <v-btn class="mr-4" color="primary" type="submit" @click="validateCart" :disabled="!validCart">Valider</v-btn>
-          </v-card-actions>
-        </v-form>
-      </v-card>
-    </v-dialog>
+  <v-dialog v-model="validateCartDialog" max-width="600px">
+    <template v-slot:activator="{ on, attrs }">
+      <v-btn v-bind="attrs" v-on="on" color="primary">Valider mon panier</v-btn>
+    </template>
+    <v-card>
+      <v-card-title>
+        <span class="text-h4">Valider mon panier</span>
+      </v-card-title>
+      <v-form ref="cartForm" v-model="validCart" @submit.prevent="validateCartSubmit">
+        <v-container>
+          <v-row>
+            <v-col cols="6">
+              <v-text-field v-model="order.location.city" :rules="rules.city" label="Ville"></v-text-field>
+            </v-col>
+            <v-col cols="6">
+              <v-text-field v-model="order.location.zipCode" :rules="rules.zipCode" label="Code postal"></v-text-field>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="12">
+              <v-text-field v-model="order.location.address" :rules="rules.address" label="Adresse"></v-text-field>
+            </v-col>
+          </v-row>
+        </v-container>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn @click="cancelButtonClick">Fermer</v-btn>
+          <v-btn class="mr-4" color="primary" type="submit" @click="validateCart" :disabled="!validCart">Valider</v-btn>
+        </v-card-actions>
+      </v-form>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script>
@@ -49,7 +49,8 @@ export default {
         v => !!v || 'Veuillez renseigner une ville'
       ],
       zipCode: [
-        v => !!v || 'Veuillez renseigner un code postal'
+        v => !!v || 'Veuillez renseigner un code postal',
+        v => /[0-9].*$/.test(v) || 'Format incorrect'
       ],
       address: [
         v => !!v || 'Veuillez renseigner une adresse'
@@ -109,11 +110,11 @@ export default {
     },
     cancelButtonClick () {
       this.validateCartDialog = false
-      this.$refs.form.reset()
+      this.$refs.cartForm.reset()
     },
     validateCartSubmit () {
       if (this.validCart) {
-        this.$refs.form.reset()
+        this.$refs.cartForm.reset()
         this.validateCartDialog = false
       }
     }

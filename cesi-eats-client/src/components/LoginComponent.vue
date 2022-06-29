@@ -43,10 +43,12 @@
 
 <script lang="typescript">
 import axios from 'axios'
+import $storeUser from '@/store/user'
 
 export default {
   name: 'LoginComponent',
   data: () => ({
+    userStore: $storeUser.state.user,
     emailRules: [
       v => !!v || 'Veuillez renseigner votre E-mail',
       v => /.+@.+/.test(v) || 'le format est incorrect'
@@ -91,7 +93,7 @@ export default {
           return
         }
 
-        this.defineUser(response.data)
+        this.defineUser(response.data.user)
         this.successSnackbarText = 'Connected'
         this.successSnackbar = true
 

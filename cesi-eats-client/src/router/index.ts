@@ -19,6 +19,8 @@ import GTCView from '../views/mandatory/GTCView.vue'
 import PrivacyPolicyView from '../views/mandatory/PrivacyPolicyView.vue'
 import ProfileView from '../views/ProfileView.vue'
 
+import $storeUser from '@/store/user'
+
 Vue.use(VueRouter)
 
 const routes: Array<RouteConfig> = [
@@ -63,8 +65,8 @@ const routes: Array<RouteConfig> = [
     component: ProductsView
   },
   {
-    path: '/mon-restaurant/:id/:name',
-    name: 'restaurant',
+    path: '/mon-restaurant',
+    name: 'mon-restaurant',
     component: MyRestaurantView
   },
   {
@@ -80,7 +82,8 @@ const routes: Array<RouteConfig> = [
   {
     path: '/livraisons',
     name: 'livraisons',
-    component: DeliveriesView
+    component: DeliveriesView,
+    beforeEnter: livraisonGuard
   },
   {
     path: '/composants',
@@ -114,10 +117,14 @@ const routes: Array<RouteConfig> = [
   }
 ]
 
+function livraisonGuard (to, from, next) {
+  if ($storeUser.state.user?.roleId === 3) return next()
+  next('/')
+}
+
 const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes
 })
-
 export default router
