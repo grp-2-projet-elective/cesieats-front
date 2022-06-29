@@ -1,89 +1,7 @@
 <template>
-    <!-- <v-row>
-        <v-col sm="12" md="5">
-            <h1> Mon profil
-                <v-dialog v-model="dialog" max-width="80%">
-                    <template v-slot:activator="{ on, attrs }">
-                        <v-btn color="primary" class="mx-2" fab small v-bind="attrs" v-on="on">
-                            <v-icon>
-                                mdi-pencil
-                            </v-icon>
-                        </v-btn>
-                    </template>
-                    <v-card>
-                        <v-card-title>
-                            <span class="text-h4">Modifier mon profil</span>
-                        </v-card-title>
-                        <v-form ref="registerForm" @submit.prevent="registerSubmit" lazy-validation>
-                            <v-container>
-                                <v-card-title>
-                                    <span class="text-h6">Données personnelles</span>
-                                </v-card-title>
-                                <v-row>
-                                    <v-col cols="12" md="6">
-                                        <v-text-field v-model="user.firstName" :rules="firstNameRules" label="Prénom*">
-                                        </v-text-field>
-                                    </v-col>
-                                    <v-col cols="12" md="6">
-                                        <v-text-field v-model="user.lastName" :rules="lastNameRules" label="Nom*">
-                                        </v-text-field>
-                                    </v-col>
-                                    <v-col cols="12" md="6">
-                                        <v-text-field v-model="user.mail" :rules="emailRules" label="E-mail*">
-                                        </v-text-field>
-                                    </v-col>
-                                    <v-col cols="12" md="6">
-                                        <v-text-field v-model="user.phone" :rules="phoneRules" label="Téléphone*">
-                                        </v-text-field>
-                                    </v-col>
-                                    <v-col cols="6" md="4">
-                                        <v-text-field v-model="user.pwd" :rules="passwordRules" label="Mot de passe*"
-                                            :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-                                            :type="show1 ? 'text' : 'password'" @click:append="show1 = !show1">
-                                        </v-text-field>
-                                    </v-col>
-                                </v-row>
-                                <v-card-title>
-                                    <span class="text-h6">Informations de livraison par défaut</span>
-                                </v-card-title>
-                                <v-row>
-                                    <v-col cols="12" md="4">
-                                        <v-text-field v-model="user.city" label="Ville*" :rules="cityRules">
-                                        </v-text-field>
-                                    </v-col>
-                                    <v-col cols="12" md="6">
-                                        <v-text-field v-model="user.address" label="Adresse*" :rules="addressRules">
-                                        </v-text-field>
-                                    </v-col>
-                                    <v-col cols="4" md="2">
-                                        <v-text-field v-model="user.zipCode" label="Code postal*" :rules="zipRules">
-                                        </v-text-field>
-                                    </v-col>
-                                </v-row>
-                            </v-container>
-                            <v-card-actions>
-                                <v-spacer></v-spacer>
-                                <v-btn @click="dialog=false">
-                                    Fermer
-                                </v-btn>
-                                <v-btn @click.stop="confirmationDialog=true" color="error">
-                                    <v-icon>mdi-delete</v-icon>
-                                    Supprimer
-                                    <ConfirmationDialogComponent :visible="confirmationDialog" @close="confirmationDialog=false"></ConfirmationDialogComponent>
-                                </v-btn>
-                                <v-btn color="primary" class="mr-4" type="submit" @click="validate">
-                                    Enregistrer
-                                </v-btn>
-                                </v-card-actions>
-                        </v-form>
-                    </v-card>
-                </v-dialog>
-            </h1>
-        </v-col>
-    </v-row> -->
     <v-card max-width="95%" class="mx-auto mt-5">
         <v-card-title>
-            <span class="text-h4">
+            <span class="text-h3 mb-3">
                 Mon profil
                 <v-dialog v-model="dialog" max-width="80%">
                     <template v-slot:activator="{ on, attrs }">
@@ -97,18 +15,18 @@
                         <v-card-title>
                             <span class="text-h4">Modifier mon profil</span>
                         </v-card-title>
-                        <v-form ref="registerForm" @submit.prevent="registerSubmit" lazy-validation>
+                        <v-form v-model="validProfile" ref="registerForm" @submit.prevent="registerSubmit">
                             <v-container>
                                 <v-card-title>
                                     <span class="text-h6">Données personnelles</span>
                                 </v-card-title>
                                 <v-row>
                                     <v-col cols="12" md="6">
-                                        <v-text-field v-model="user.firstName" :rules="firstNameRules" label="Prénom*">
+                                        <v-text-field v-model="user.firstname" :rules="firstNameRules" label="Prénom*">
                                         </v-text-field>
                                     </v-col>
                                     <v-col cols="12" md="6">
-                                        <v-text-field v-model="user.lastName" :rules="lastNameRules" label="Nom*">
+                                        <v-text-field v-model="user.lastname" :rules="lastNameRules" label="Nom*">
                                         </v-text-field>
                                     </v-col>
                                     <v-col cols="12" md="6">
@@ -119,12 +37,16 @@
                                         <v-text-field v-model="user.phone" :rules="phoneRules" label="Téléphone*">
                                         </v-text-field>
                                     </v-col>
-                                    <v-col cols="6" md="4">
+                                    <v-col cols="12" md="12">
+                                        <v-text-field v-model="user.thumbnail" :rules="thumbnail"
+                                            label="URL de la photo de profil*"></v-text-field>
+                                    </v-col>
+                                    <!-- <v-col cols="6" md="4">
                                         <v-text-field v-model="user.pwd" :rules="passwordRules" label="Mot de passe*"
                                             :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
                                             :type="show1 ? 'text' : 'password'" @click:append="show1 = !show1">
                                         </v-text-field>
-                                    </v-col>
+                                    </v-col> -->
                                 </v-row>
                                 <v-card-title>
                                     <span class="text-h6">Informations de livraison par défaut</span>
@@ -149,13 +71,11 @@
                                 <v-btn @click="dialog=false">
                                     Fermer
                                 </v-btn>
-                                <v-btn @click.stop="confirmationDialog=true" color="error">
+                                <v-btn @click="deleteProfile" color="error" to="/">
                                     <v-icon>mdi-delete</v-icon>
                                     Supprimer
-                                    <ConfirmationDialogComponent :visible="confirmationDialog"
-                                        @close="confirmationDialog=false"></ConfirmationDialogComponent>
                                 </v-btn>
-                                <v-btn color="primary" class="mr-4" type="submit" @click="validate">
+                                <v-btn color="primary" class="mr-4" type="submit" @click="updateProfile" :disabled="!validProfile">
                                     Enregistrer
                                 </v-btn>
                             </v-card-actions>
@@ -166,48 +86,69 @@
         </v-card-title>
         <v-form ref="registerForm" @submit.prevent="registerSubmit" lazy-validation>
             <v-container>
-                <v-card-title>
-                    <span class="text-h6">Données personnelles</span>
-                </v-card-title>
+                <v-row >
+                    <v-avatar size="150"><img :src="user.thumbnail" alt="Avatar" /></v-avatar>
+                </v-row>
                 <v-row>
-                    <v-col cols="12" md="6">
-                        <v-text-field v-model="user.firstName" :rules="firstNameRules" label="Prénom*">
-                        </v-text-field>
+                    <v-col cols="12" md="12">
+                       <h1>{{user.firstname}} {{user.lastname}}</h1>
+                    </v-col>
+                    <v-col cols="12" md="3">
+                        <h3>Mail : {{user.mail}}</h3>
+                    </v-col>
+                    <v-col cols="12" md="3">
+                        <h3>Téléphone : {{user.phone}}</h3>
                     </v-col>
                     <v-col cols="12" md="6">
-                        <v-text-field v-model="user.lastName" :rules="lastNameRules" label="Nom*">
-                        </v-text-field>
-                    </v-col>
-                    <v-col cols="12" md="6">
-                        <v-text-field v-model="user.mail" :rules="emailRules" label="E-mail*">
-                        </v-text-field>
-                    </v-col>
-                    <v-col cols="12" md="6">
-                        <v-text-field v-model="user.phone" :rules="phoneRules" label="Téléphone*">
-                        </v-text-field>
-                    </v-col>
-                    <v-col cols="6" md="4">
-                        <v-text-field v-model="user.pwd" :rules="passwordRules" label="Mot de passe*"
-                            :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" :type="show1 ? 'text' : 'password'"
-                            @click:append="show1 = !show1">
-                        </v-text-field>
+                        <!-- form -->
+                          <v-dialog v-model="mdpDialog" max-width="600px">
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-btn color="primary" class="mx-2" small v-bind="attrs" v-on="on" rounded>
+                          Modifier mon mot de passe
+                        </v-btn>
+                    </template>
+                    <v-card>
+                        <v-card-title>
+                            <span class="text-h4">Changement de mot de passe</span>
+                        </v-card-title>
+                        <v-form v-model="validProfile" ref="mdpForm" @submit.prevent="registerSubmit">
+                            <v-container>
+                                <v-row>
+                                    <v-col cols="12" md="12">
+                                        <v-text-field v-model="user.pwd" :rules="passwordRules" label="Nouveau mot de passe"
+                                            :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+                                            :type="show1 ? 'text' : 'password'" @click:append="show1 = !show1">
+                                        </v-text-field>
+                                    </v-col>
+                                </v-row>
+                            </v-container>
+                            <v-card-actions>
+                                <v-spacer></v-spacer>
+                                <v-btn @click="closeMdpDialog">
+                                    Fermer
+                                </v-btn>
+                                <v-btn color="primary" class="mr-4" type="submit" @click="updatePwd" :disabled="!validProfile">
+                                    Enregistrer
+                                </v-btn>
+                            </v-card-actions>
+                        </v-form>
+                    </v-card>
+                </v-dialog>
+                        <!-- form -->
                     </v-col>
                 </v-row>
                 <v-card-title>
-                    <span class="text-h6">Informations de livraison par défaut</span>
+                    <span class="text-h6 mt-4">Informations de livraison par défaut</span>
                 </v-card-title>
                 <v-row>
                     <v-col cols="12" md="4">
-                        <v-text-field v-model="user.city" label="Ville*" :rules="cityRules">
-                        </v-text-field>
+                        <h3>Ville : {{user.city}}</h3>
                     </v-col>
                     <v-col cols="12" md="6">
-                        <v-text-field v-model="user.address" label="Adresse*" :rules="addressRules">
-                        </v-text-field>
+                        <h3>Adresse : {{user.address}}</h3>
                     </v-col>
                     <v-col cols="4" md="2">
-                        <v-text-field v-model="user.zipCode" label="Code postal*" :rules="zipRules">
-                        </v-text-field>
+                        <h3>Code postal : {{user.zipCode}}</h3>
                     </v-col>
                 </v-row>
             </v-container>
@@ -217,14 +158,14 @@
 
 <script lang="typescript">
 import axios from 'axios'
-import ConfirmationDialogComponent from '@/components/ConfirmationDialogComponent.vue'
+import $storeUser from '@/store/user'
 
 export default {
   name: 'RegisterComponent',
   data: () => ({
-    confirmationDialog: false,
-    userID: null,
     dialog: false,
+    mdpDialog: false,
+    validProfile: false,
     firstNameRules: [
       v => !!v || 'Veuillez renseigner votre prénom'
     ],
@@ -254,28 +195,35 @@ export default {
     ],
     zipRules: [
       v => !!v || 'Veuillez renseigner votre code postal',
-      v => /[0-9].*$/.test(v) || 'Format incorrect'
+      v => /^[0-9]*$/.test(v) || 'Format incorrect'
     ],
-    user: {
-      mail: 'test@viacesi.fr',
-      pwd: 'WreackingBall761',
-      role: null,
-      city: 'here',
-      zipCode: '85600',
-      address: 'azertyuiop',
-      firstName: 'Vincent',
-      lastName: 'Laclide',
-      phone: '0781294099'
-    },
+    thumbnail: [
+      v => !!v || 'Veuillez entrer une URL'
+    ],
+    user: $storeUser.state.user,
     show1: false
   }),
-  components: {
-    ConfirmationDialogComponent
-  },
   methods: {
-  },
-  mounted () {
-    this.userID = this.$route.params.id
+    updateProfile () {
+      axios.patch('http://localhost:4100/api/v1/users/' + this.user.id, this.user)
+        .catch(error => console.log(error))
+      this.dialog = false
+    },
+    deleteProfile () {
+      axios.delete('http://localhost:4100/api/v1/users/' + this.user.id)
+        .catch(error => console.log(error))
+      this.dialog = false
+    },
+    updatePwd () {
+      /* axios.patch('http://localhost:4100/api/v1/users/' + this.user.id, { password: this.user.pwd })
+        .catch(error => console.log(error)) */
+      this.mdpDialog = false
+      this.$refs.mdpForm.reset()
+    },
+    closeMdpDialog () {
+      this.$refs.mdpForm.reset()
+      this.mdpDialog = false
+    }
   }
 }
 </script>

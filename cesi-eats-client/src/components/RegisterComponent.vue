@@ -26,6 +26,9 @@
           <v-col cols="12" md="6">
             <v-text-field v-model="user.phone" :rules="phoneRules" label="Téléphone*"></v-text-field>
           </v-col>
+          <v-col cols="12" md="6">
+            <v-text-field v-model="user.thumbnail" :rules="thumbnail" label="URL de la photo de profil*"></v-text-field>
+          </v-col>
           <v-col cols="6" md="4">
             <v-text-field v-model="user.pwd" :rules="passwordRules" label="Mot de passe*"
               :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" :type="show1 ? 'text' : 'password'"
@@ -103,10 +106,13 @@ export default {
     ],
     zipRules: [
       v => !!v || 'Veuillez renseigner votre code postal',
-      v => /[0-9].*$/.test(v) || 'Format incorrect'
+      v => /^[0-9]*$/.test(v) || 'Format incorrect'
     ],
     mandatory: [
       v => !!v || 'Veuillez accepter les conditions'
+    ],
+    thumbnail: [
+      v => !!v || 'Veuillez entrer une URL'
     ],
     user: {
       mail: '',
@@ -117,7 +123,8 @@ export default {
       address: '',
       firstName: '',
       lastName: '',
-      phone: ''
+      phone: '',
+      thumbnail: ''
     },
     show1: false,
     roles: [
@@ -133,7 +140,7 @@ export default {
   methods: {
     registerSubmit () {
       this.snackbar = false
-      if (this.user.mail === '' || this.user.pwd === '' || (this.user.role === '' || this.user.role === null) || this.user.city === '' || this.user.zipCode === '' || this.user.address === '' || this.user.firstName === '' || this.user.lastName === '' || this.user.phone === '') {
+      if (this.user.mail === '' || this.user.pwd === '' || (this.user.role === '' || this.user.role === null) || this.user.city === '' || this.user.zipCode === '' || this.user.address === '' || this.user.firstName === '' || this.user.lastName === '' || this.user.phone === '' || this.user.thumbnail === '') {
         console.log('Please, specify all informations')
         return
       }
@@ -154,6 +161,7 @@ export default {
         address: this.user.address,
         phone: this.user.phone,
         password: this.user.pwd,
+        thumbnail: this.user.thumbnail,
         roleId: roleId
       }
 
