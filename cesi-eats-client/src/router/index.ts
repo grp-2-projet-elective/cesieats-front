@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
+
 import HomeView from '../views/HomeView.vue'
 import RegisterView from '../views/RegisterView.vue'
 import CustomerView from '../views/roles/CustomerView.vue'
@@ -37,7 +38,8 @@ const routes: Array<RouteConfig> = [
   {
     path: '/profil/:userID',
     name: 'profile',
-    component: ProfileView
+    component: ProfileView,
+    beforeEnter: profileGuard
   },
   {
     path: '/client',
@@ -57,38 +59,44 @@ const routes: Array<RouteConfig> = [
   {
     path: '/restaurants',
     name: 'restaurants',
-    component: RestaurantsView
+    component: RestaurantsView,
+    beforeEnter: restaurantsGuard
   },
   {
     path: '/restaurants/:name/:id',
     name: 'products',
-    component: ProductsView
+    component: ProductsView,
+    beforeEnter: productsGuard
   },
   {
     path: '/mon-restaurant',
     name: 'mon-restaurant',
-    component: MyRestaurantView
+    component: MyRestaurantView,
+    beforeEnter: myRestaurantGuard
   },
   {
     path: '/panier',
     name: 'panier',
-    component: CartView
+    component: CartView,
+    beforeEnter: cartGuard
   },
   {
     path: '/commandes',
     name: 'commandes',
-    component: OrdersView
+    component: OrdersView,
+    beforeEnter: orderGuard
   },
   {
     path: '/livraisons',
     name: 'livraisons',
     component: DeliveriesView,
-    beforeEnter: livraisonGuard
+    beforeEnter: deliveryGuard
   },
   {
     path: '/composants',
     name: 'composants',
-    component: ComponentsView
+    component: ComponentsView,
+    beforeEnter: componentsGuard
   },
   {
     path: '/aide',
@@ -117,8 +125,36 @@ const routes: Array<RouteConfig> = [
   }
 ]
 
-function livraisonGuard (to, from, next) {
+function profileGuard (to, from, next) {
+  if ($storeUser.state.user.roleId) return next()
+  next('/')
+}
+function restaurantsGuard (to, from, next) {
+  if ($storeUser.state.user?.roleId === 1) return next()
+  next('/')
+}
+function productsGuard (to, from, next) {
+  if ($storeUser.state.user?.roleId === 1) return next()
+  next('/')
+}
+function myRestaurantGuard (to, from, next) {
+  if ($storeUser.state.user?.roleId === 2) return next()
+  next('/')
+}
+function cartGuard (to, from, next) {
+  if ($storeUser.state.user?.roleId === 1) return next()
+  next('/')
+}
+function orderGuard (to, from, next) {
+  if ($storeUser.state.user?.roleId === 1) return next()
+  next('/')
+}
+function deliveryGuard (to, from, next) {
   if ($storeUser.state.user?.roleId === 3) return next()
+  next('/')
+}
+function componentsGuard (to, from, next) {
+  if ($storeUser.state.user?.roleId === 5 || $storeUser.state.user?.roleId === 6) return next()
   next('/')
 }
 
