@@ -18,6 +18,7 @@ import TOUView from '../views/mandatory/TOUView.vue'
 import GTCView from '../views/mandatory/GTCView.vue'
 import PrivacyPolicyView from '../views/mandatory/PrivacyPolicyView.vue'
 import ProfileView from '../views/ProfileView.vue'
+import AccountsView from '../views/commercial/AccountsView.vue'
 
 import $storeUser from '@/store/user'
 
@@ -35,7 +36,7 @@ const routes: Array<RouteConfig> = [
     component: RegisterView
   },
   {
-    path: '/profil/:userID',
+    path: '/profil',
     name: 'profile',
     component: ProfileView
   },
@@ -114,6 +115,11 @@ const routes: Array<RouteConfig> = [
     path: '/politique-confidentialite',
     name: 'politique-confidentialite',
     component: PrivacyPolicyView
+  },
+  {
+    path: '/comptes',
+    name: 'clientsAccounts',
+    component: AccountsView
   }
 ]
 

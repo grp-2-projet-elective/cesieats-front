@@ -12,11 +12,11 @@
         <v-list dense class="py-0">
           <v-list-item two-line :class="miniVariant && 'px-0'">
             <v-list-item-avatar class="ml-2">
-              <img src="https://randomuser.me/api/portraits/men/81.jpg" alt="Avatar">
+              <img :src="user.thumbnail" alt="Avatar">
             </v-list-item-avatar>
             <v-list-item-content>
-              <v-list-item-title>NOM Prénom</v-list-item-title>
-              <v-list-item-subtitle>prenom.nom@viace.fr</v-list-item-subtitle>
+              <v-list-item-title>{{user.firstname}} {{user.lastname}}</v-list-item-title>
+              <v-list-item-subtitle>{{user.mail}}</v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
 
@@ -43,6 +43,7 @@
 
 <script>
 import $storeCart from '@/store/cart'
+import $storeUser from '@/store/user'
 
 export default {
   props: {
@@ -53,7 +54,8 @@ export default {
     miniVariant: true,
     expandOnHover: true,
     permanent: true,
-    cart: $storeCart.state.cart
+    cart: $storeCart.state.cart,
+    user: $storeUser.state.user
   }),
   computed: {
     totalQuantity () {
