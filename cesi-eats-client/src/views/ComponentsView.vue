@@ -16,22 +16,32 @@
         </v-col>
       </v-row>
       <v-container class="pa-0">
-        <v-layout wrap>
-          <v-flex v-for="(component, idx) in components" :key="idx" xs12 md4>
-            <a :href="'/components' + component.src + component.name + '.vue'" class="text-decoration-none" download>
-              <v-card outlined>
-                <v-list>
-                  <v-list-item>
-                    <v-list-item-title>{{ component.name }}</v-list-item-title>
-                    <v-list-item-icon>
-                      <v-icon class="primary--text">mdi-download</v-icon>
-                    </v-list-item-icon>
-                  </v-list-item>
-                </v-list>
-              </v-card>
-            </a>
-          </v-flex>
-        </v-layout>
+        <v-simple-table>
+          <template v-slot:default>
+            <thead>
+            <tr>
+              <th class="text-left">Nom du composant</th>
+              <th class="text-center">Éditer</th>
+              <th class="text-center">Télécharger</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for="component in components" :key="component.name">
+              <td>{{ component.name }}</td>
+              <td class="text-center">
+                <a target="_blank" class="text-decoration-none" :href="'https://github.dev/grp-2-projet-elective/cesieats-front/blob/develop/cesi-eats-client/src/components/' + component.path + component.name +'.vue'">
+                  <v-icon color="primary">mdi-pencil</v-icon>
+                </a>
+              </td>
+              <td class="text-center">
+                <a target="_blank" class="text-decoration-none" :href="'https://minhaskamal.github.io/DownGit/#/home?url=https://github.com/grp-2-projet-elective/cesieats-front/blob/develop/cesi-eats-client/src/components/' + component.path + component.name +'.vue'">
+                  <v-icon color="primary">mdi-download</v-icon>
+                </a>
+              </td>
+            </tr>
+            </tbody>
+          </template>
+        </v-simple-table>
       </v-container>
     </v-container>
   </div>
@@ -42,13 +52,23 @@ export default {
   name: 'ComposantsView',
   data: () => ({
     components: [
-      { name: 'NavbarComponent', src: '/' },
-      { name: 'MenuComponent', src: '/' },
-      { name: 'FooterComponent', src: '/' },
-      { name: 'CustomerOperation', src: '/roles/' },
-      { name: 'RestaurantOwnerOperation', src: '/roles/' },
-      { name: 'DeliveryManOperation', src: '/roles/' },
-      { name: 'JoinUsComponent', src: '/roles/' }
+      { name: 'LeaderboardComponent', path: 'home/' },
+      { name: 'RolesComponent', path: 'home/' },
+      { name: 'CustomerOperation', path: 'roles/' },
+      { name: 'DeliveryManOperation', path: 'roles/' },
+      { name: 'JoinUsComponent', path: 'roles/' },
+      { name: 'RestaurantOwnerOperation', path: 'roles/' },
+      { name: 'MenusComponent', path: 'shop/' },
+      { name: 'ProductsComponent', path: 'shop/' },
+      { name: 'ValidateCartComponent', path: 'shop/' },
+      { name: 'ValidateDeliveryComponent', path: 'shop/' },
+      { name: 'ValidateOrderComponent', path: 'shop/' },
+      { name: 'ConfirmationDialogComponent', path: '' },
+      { name: 'FooterComponent', path: '' },
+      { name: 'LoginComponent', path: '' },
+      { name: 'MenuComponent', path: '' },
+      { name: 'NavbarComponent', path: '' },
+      { name: 'RegisterComponent', path: '' }
     ]
   })
 }

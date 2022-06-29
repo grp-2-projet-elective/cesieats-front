@@ -4,7 +4,7 @@
       <h2>Mes commandes</h2>
       <v-row class="mt-2">
         <v-col>
-          <v-card outlined v-for="order in orders.filter(order => order.customerId === user._id)" :key="order.id" class="mx-auto mb-5">
+          <v-card outlined v-for="order in orders.filter(order => order.customerId === user.id || order.restaurant.restaurantOwnerId)" :key="order.id" class="mx-auto mb-5">
             <v-row class="mt-1 mb-1">
               <v-col sm="3">
                 <v-img class="ml-4" :src="order.restaurant.image" :alt="order.name" height="100%"/>
@@ -32,10 +32,10 @@
                     <v-icon color="primary">{{ show ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
                   </v-btn>
                   <v-spacer></v-spacer>
-                  <v-btn v-if="user.roleId === 1 && order.orderState === 'En attente de préparation'" color="secondary" text class="mr-4">
+                  <v-btn v-if="user.roleId === 2 && order.orderState === 'En attente de préparation'" color="secondary" text class="mr-4">
                     <ValidateOrderComponent :order="order"/>
                   </v-btn>
-                  <v-btn v-if="user.roleId === 0 && order.orderState === 'En attente de préparation'" text class="mr-4">
+                  <v-btn v-if="user.roleId === 1 && order.orderState === 'En attente de préparation'" text class="mr-4">
                     {{ order.orderState }}
                     <v-icon class="ml-1">mdi-alarm</v-icon>
                   </v-btn>
@@ -95,6 +95,7 @@
 <script>
 import axios from 'axios'
 import ValidateOrderComponent from '@/components/shop/ValidateOrderComponent'
+import $storeUser from '@/store/user'
 
 export default {
   name: 'OrdersView',
@@ -102,11 +103,8 @@ export default {
     ValidateOrderComponent
   },
   data: () => ({
+    user: $storeUser.state.user,
     show: false,
-    user: {
-      _id: '0',
-      roleId: 1
-    },
     orders: []
   }),
   mounted () {

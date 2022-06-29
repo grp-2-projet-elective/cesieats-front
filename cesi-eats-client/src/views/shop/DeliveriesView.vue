@@ -4,7 +4,7 @@
       <h2>Mes livraisons</h2>
       <v-row class="mt-2">
         <v-col>
-          <v-card outlined v-for="delivery in deliveries.filter(delivery => delivery.deliveryManId === user._id)" :key="delivery.id" class="mx-auto mb-5">
+          <v-card outlined v-for="delivery in deliveries.filter(delivery => delivery.deliveryManId === user.id)" :key="delivery.id" class="mx-auto mb-5">
             <v-row class="mt-1 mb-1">
               <v-col sm="3">
                 <v-img class="ml-4" :src="delivery.restaurant.image" :alt="delivery.name" height="100%"/>
@@ -54,6 +54,7 @@
 <script>
 import axios from 'axios'
 import ValidateDeliveryComponent from '@/components/shop/ValidateDeliveryComponent'
+import $storeUser from '@/store/user'
 
 export default {
   name: 'DeliveriesView',
@@ -61,10 +62,7 @@ export default {
     ValidateDeliveryComponent
   },
   data: () => ({
-    user: {
-      _id: '2',
-      roleId: 2
-    },
+    user: $storeUser.state.user,
     deliveries: []
   }),
   mounted () {
