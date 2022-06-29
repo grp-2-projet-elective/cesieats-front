@@ -94,6 +94,7 @@ export default {
         }
 
         this.defineUser(response.data.user)
+        this.defineTokens({ accessToken: response.data.accessToken, refreshToken: response.data.refreshToken })
         this.successSnackbarText = 'Connected'
         this.successSnackbar = true
 
@@ -104,6 +105,9 @@ export default {
     },
     defineUser (user) {
       this.$store.commit('defineUser', user)
+    },
+    defineTokens (tokens) {
+      this.$store.commit('defineTokens', tokens)
     }
   }
 }
