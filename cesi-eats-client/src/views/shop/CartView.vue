@@ -100,7 +100,7 @@
 </template>
 
 <script>
-import $store from '@/store/cart'
+import $storeCart from '@/store/cart'
 import axios from 'axios'
 import ValidateCartComponent from '@/components/shop/ValidateCartComponent'
 
@@ -111,7 +111,7 @@ export default {
   },
   data: () => ({
     show: false,
-    cart: $store.state.cart,
+    cart: $storeCart.state.cart,
     restaurants: []
   }),
   methods: {

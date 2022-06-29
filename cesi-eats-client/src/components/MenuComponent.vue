@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import $store from '@/store/cart'
+import $storeCart from '@/store/cart'
 
 export default {
   props: {
@@ -53,7 +53,7 @@ export default {
     miniVariant: true,
     expandOnHover: true,
     permanent: true,
-    cart: $store.state.cart
+    cart: $storeCart.state.cart
   }),
   computed: {
     totalQuantity () {

@@ -9,18 +9,13 @@
               <v-slide-item v-for="(menu, idx) in menus.filter(menu => menu.restaurantId === restaurant._id)" :key="idx" v-slot="{ active, toggle }">
                 <v-card outlined class="mx-auto" max-width="200">
                   <v-img :src="menu.image" height="175px"/>
-                  <v-card-title>
-                    {{ menu.name }}
-                  </v-card-title>
+                  <v-card-title>{{ menu.name }}</v-card-title>
                   <v-card-subtitle>{{ menu.price }} €</v-card-subtitle>
                   <v-card-actions>
                     <v-btn text color="primary" @click="toggle">Découvrir</v-btn>
                     <v-spacer></v-spacer>
 
-                    <v-btn v-if="!modif" icon class="mr-1">
-                      <v-icon color="primary">mdi-plus-circle</v-icon>
-                    </v-btn>
-                    <v-btn v-else icon class="mr-1">
+                    <v-btn v-if="modif" icon class="mr-1">
                       <v-dialog v-model="dialog" max-width="50%">
                         <template v-slot:activator="{ on, attrs }">
                           <v-btn color="primary" class="mx-2" icon fab small v-bind="attrs" v-on="on">
@@ -29,9 +24,9 @@
                         </template>
                         <v-card>
                           <v-card-title>
-                            <span class="text-h4">{{menu.name}}</span>
+                            <span class="text-h4">{{ menu.name }}</span>
                           </v-card-title>
-                          <v-form v-model="validate" ref="myRestaurantForm" @submit="connectionSubmit">
+                          <v-form v-model="validMenu" ref="myRestaurantForm" @submit="validateMenuSubmit">
                             <v-container>
                               <v-row>
                                 <v-col cols="12" md="5">
@@ -58,9 +53,9 @@
                               </v-btn>
                               <v-btn @click="cancelButtonClick" color="error">
                                 <v-icon>mdi-delete</v-icon>
-                                  Supprimer
+                                Supprimer
                               </v-btn>
-                              <v-btn color="primary" class="mr-4" type="submit" @click="validate">
+                              <v-btn color="primary" class="mr-4" type="submit" @click="validateMenu" :disabled="!validMenu">
                                 Enregistrer
                               </v-btn>
                             </v-card-actions>
@@ -81,7 +76,6 @@
                         <v-icon color="primary">mdi-minus-circle</v-icon>
                       </v-btn>
                     </div>
-
                   </v-card-actions>
                   <v-expand-transition>
                     <v-card v-if="active ? reveal=true : reveal=false" class="transition-fast-in-fast-out v-card--reveal" style="height: 100%;">
@@ -122,7 +116,8 @@ export default {
   data: () => ({
     model: [],
     reveal: false,
-    dialog: false
+    dialog: false,
+    validMenu: false
   }),
   methods: {
     addToCart (item) {
@@ -137,6 +132,18 @@ export default {
         return mp.quantity
       }
       return 0
+    },
+    validateMenu () {
+      return false
+    },
+    validateMenuSubmit () {
+      if (this.validMenu) {
+        this.$refs.menuForm.reset()
+        this.dialog = false
+      }
+    },
+    deleteMenu (item) {
+      return null
     }
   },
   computed: {
