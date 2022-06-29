@@ -35,6 +35,7 @@
 
 <script>
 import axios from 'axios'
+import $storeUser from '@/store/user'
 
 export default {
   name: 'ValidateCartComponent',
@@ -44,6 +45,7 @@ export default {
     totalPrice: null
   },
   data: () => ({
+    user: $storeUser.state.user,
     rules: {
       city: [
         v => !!v || 'Veuillez renseigner une ville'
@@ -93,7 +95,7 @@ export default {
         },
         date: Date.now(),
         orderState: 'En attente de préparation',
-        customerId: '0',
+        customerId: this.user.id,
         location: {
           city: this.order.location.city,
           zipCode: this.order.location.zipCode,

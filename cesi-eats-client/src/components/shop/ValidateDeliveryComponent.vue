@@ -32,6 +32,7 @@ export default {
     action: String
   },
   data: () => ({
+    newDeliveryMan: {},
     validDelivery: false,
     validateDeliveryDialog: false,
     show1: true
@@ -45,7 +46,7 @@ export default {
           .catch(error => console.log(error))
       }
       if (this.action === 'Refuser') {
-        axios.patch('http://localhost:4300/api/v1/deliveries/' + this.delivery._id, { deliveryManId: '3' })
+        axios.patch('http://localhost:4300/api/v1/deliveries/' + this.delivery._id, { deliveryManId: this.newDeliveryMan.id })
           .catch(error => console.log(error))
       }
       if (this.action === 'Confirmer') {
@@ -67,6 +68,11 @@ export default {
         this.validateDeliveryDialog = false
       }
     }
+  },
+  mounted () {
+    axios.get('http://localhost:4300/api/v1/deliveries/deliveryman/' + this.delivery.deliveryManId)
+      .then(response => (this.newDeliveryMan = response.data))
+      .catch(error => console.log(error))
   }
 }
 </script>

@@ -18,64 +18,64 @@
                     <v-spacer></v-spacer>
 
                     <v-btn v-if="modif" icon class="mr-1">
-                      <v-dialog v-model="dialog" max-width="50%">
+                      <v-dialog max-width="50%">
                         <template v-slot:activator="{ on, attrs }">
                           <v-btn color="primary" class="mx-2" icon fab small v-bind="attrs" v-on="on">
-                            <v-icon>
-                              mdi-pencil
-                            </v-icon>
+                            <v-icon>mdi-pencil</v-icon>
                           </v-btn>
                         </template>
-                        <v-card>
-                          <v-card-title>
-                            <span class="text-h4">{{ product.name }}</span>
-                          </v-card-title>
-                          <v-form v-model="validProduct" ref="productForm" @submit="validateProductSubmit">
-                            <v-container>
-                              <v-row>
-                                <v-col cols="12" md="5">
-                                  <v-text-field v-model="product.name" label="Intitulé du produit"/>
-                                </v-col>
-                                <v-col cols="12" md="12">
-                                  <v-textarea v-model="product.description" label="Description du produit"/>
-                                </v-col>
-                                <v-col cols="12" md="4">
-                                  <v-text-field v-model="product.price" label="Prix du produit" type="number"/>
-                                </v-col>
-                                <v-col cols="12" md="4">
-                                  <v-text-field v-model="product.categories" label="Categorie(s)" multiple/>
-                                </v-col>
-                                <v-col cols="8" md="8">
-                                  <v-text-field v-model="product.image" label="URL de l'image"/>
-                                </v-col>
-                                <v-col cols="8" md="8">
-                                  <v-checkbox v-model="product.isOutOfStock" label="Rupture de stock ?" required/>
-                                </v-col>
-                              </v-row>
-                            </v-container>
-                            <v-card-actions>
-                              <v-spacer></v-spacer>
-                              <v-btn @click="dialog=false">
-                                Fermer
-                              </v-btn>
-                              <v-btn @click="deleteProduct(product)" color="error">
-                                <v-icon>mdi-delete</v-icon>
-                                Supprimer
-                              </v-btn>
-                              <v-btn color="primary" class="mr-4" type="submit" @click="validateProduct" :disabled="!validProduct">
-                                Enregistrer
-                              </v-btn>
-                            </v-card-actions>
-                          </v-form>
-                        </v-card>
+                        <template v-slot:default="dialog">
+                          <v-card>
+                            <v-card-title>
+                              <span class="text-h4">{{ product.name }}</span>
+                            </v-card-title>
+                            <v-form v-model="validProduct" ref="productForm" @submit="validateProductSubmit" lazy-validation>
+                              <v-container>
+                                <v-row>
+                                  <v-col cols="12" md="5">
+                                    <v-text-field v-model="product.name" label="Intitulé du produit" :rules="rules"/>
+                                  </v-col>
+                                  <v-col cols="12" md="12">
+                                    <v-textarea v-model="product.description" label="Description du produit"/>
+                                  </v-col>
+                                  <v-col cols="12" md="4">
+                                    <v-text-field v-model="product.price" label="Prix du produit" type="number" :rules="rules"/>
+                                  </v-col>
+                                  <v-col cols="12" md="4">
+                                    <v-text-field v-model="product.categories" label="Categorie(s)" :rules="rules"/>
+                                  </v-col>
+                                  <v-col cols="8" md="8">
+                                    <v-text-field v-model="product.image" label="URL de l'image" :rules="rules"/>
+                                  </v-col>
+                                  <v-col cols="8" md="8">
+                                    <v-checkbox v-model="product.isOutOfStock" label="Rupture de stock ?" required/>
+                                  </v-col>
+                                </v-row>
+                              </v-container>
+                              <v-card-actions>
+                                <v-spacer></v-spacer>
+                                <v-btn @click="dialog.value=false">
+                                  Fermer
+                                </v-btn>
+                                <v-btn @click="deleteProduct(product); dialog.value=false" color="error">
+                                  <v-icon>mdi-delete</v-icon>
+                                  Supprimer
+                                </v-btn>
+                                <v-btn color="primary" class="mr-4" type="submit" @click="validateProduct(product); dialog.value=false" :disabled="!validProduct">
+                                  Enregistrer
+                                </v-btn>
+                              </v-card-actions>
+                            </v-form>
+                          </v-card>
+                        </template>
                       </v-dialog>
                     </v-btn>
 
-                    <div class="quantity-container">
+                    <div v-if="!modif" class="quantity-container">
                       <input v-model="product.quantity" type="number" class="quantity-input" placeholder="0" disabled/>
                     </div>
-                    <v-spacer></v-spacer>
-                    <div class="actions-container">
+                    <v-spacer v-if="!modif"></v-spacer>
+                    <div v-if="!modif" class="actions-container">
                       <v-btn icon class="mr-1" @click="addToCart(product)">
                         <v-icon color="primary">mdi-plus-circle</v-icon>
                       </v-btn>
@@ -104,6 +104,8 @@
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
   name: 'ProductsComponent',
   props: {
@@ -115,8 +117,10 @@ export default {
   data: () => ({
     model: [],
     reveal: false,
-    dialog: false,
-    validProduct: false
+    validProduct: false,
+    rules: [
+      v => !!v || 'Veuillez renseigner ce champs'
+    ]
   }),
   methods: {
     addToCart (item) {
@@ -125,17 +129,20 @@ export default {
     removeFromCart (item) {
       this.$store.commit('removeFromCart', item)
     },
-    validateProduct () {
-      return false
+    validateProduct (item) {
+      item.categories = item.categories.toString().split(',')
+      axios.patch('http://localhost:4500/api/v1/products/' + item._id, item)
+        .catch(error => console.log(error))
     },
     validateProductSubmit () {
       if (this.validProduct) {
         this.$refs.productForm.reset()
-        this.dialog = false
       }
     },
     deleteProduct (item) {
-      return null
+      axios.delete('http://localhost:4500/api/v1/products/' + item._id)
+        .catch(error => console.log(error))
+      location.reload()
     }
   }
 }

@@ -5,15 +5,11 @@
         <h2>Mon restaurant
           <v-dialog v-model="dialogs.restaurantDialog" max-width="80%">
             <template v-slot:activator="{ on, attrs }">
-              <v-btn v-if="!restaurantExist" color="primary" class="mx-2" fab small v-bind="attrs" v-on="on">
-                <v-icon>
-                  mdi-plus
-                </v-icon>
+              <v-btn v-if="restaurant.error" color="primary" class="mx-2" fab small v-bind="attrs" v-on="on">
+                <v-icon>mdi-plus</v-icon>
               </v-btn>
               <v-btn v-else color="primary" class="mx-2" fab small v-bind="attrs" v-on="on">
-                <v-icon>
-                  mdi-pencil
-                </v-icon>
+                <v-icon>mdi-pencil</v-icon>
               </v-btn>
             </template>
             <v-card>
@@ -27,42 +23,54 @@
                   </v-card-title>
                   <v-row>
                     <v-col cols="8" md="4">
-                      <v-text-field v-model="restaurant.name" label="Nom du restaurant"/>
+                      <v-text-field v-model="restaurant.name" label="Nom du restaurant" :rules="rules"/>
                     </v-col>
                     <v-col cols="8" md="4">
-                      <v-select v-model="restaurant.categories" :items="categories" label="Categorie(s)" multiple/>
+                      <v-text-field v-model="restaurant.categories" label="Catégorie(s)" hint="Catégorie 1, Catégorie 2" persistent-hint :rules="rules"/>
                     </v-col>
-                    <v-col cols="4" md="2">
-                      <v-text-field v-model="restaurant.openingHours" label="Heures d'ouverture" hint="Xh - Xh / Xh - Xh" persistent-hint/>
+                    <v-col cols="4" md="4">
+                      <v-text-field v-model="restaurant.openingHours" label="Heures d'ouverture" hint="Xh - Xh / Xh - Xh" persistent-hint :rules="rules"/>
                     </v-col>
                     <v-col cols="12" md="12">
                       <v-textarea v-model="restaurant.description" label="Description"/>
                     </v-col>
                   </v-row>
                   <v-row>
-                    <v-col cols="2" md="5">
-                      <v-text-field v-model="restaurant.image" label="URL de l'image"/>
+                    <v-col cols="12" md="5">
+                      <v-text-field v-model="restaurant.image" label="URL de l'image" :rules="rules"/>
                     </v-col>
                   </v-row>
                   <v-card-title>
                     <span class="text-h6 mt-5">Localisation du restaurant</span>
                   </v-card-title>
-                  <v-row>
+                  <v-row v-if="restaurant.error">
                     <v-col cols="12" md="4">
-                      <v-text-field v-model="restaurant.location.city" label="Ville"/>
+                      <v-text-field v-model="restaurant.city" label="Ville" :rules="rules"/>
                     </v-col>
                     <v-col cols="12" md="6">
-                      <v-text-field v-model="restaurant.location.address" label="Adresse"/>
+                      <v-text-field v-model="restaurant.address" label="Adresse" :rules="rules"/>
                     </v-col>
                     <v-col cols="4" md="2">
-                      <v-text-field v-model="restaurant.location.zipCode" label="Code postal"/>
+                      <v-text-field v-model="restaurant.zipCode" label="Code postal" :rules="rules"/>
+                    </v-col>
+                  </v-row>
+                  <v-row v-if="restaurant.location">
+                    <v-col cols="12" md="4">
+                      <v-text-field v-model="restaurant.location.city" label="Ville" :rules="rules"/>
+                    </v-col>
+                    <v-col cols="12" md="6">
+                      <v-text-field v-model="restaurant.location.address" label="Adresse" :rules="rules"/>
+                    </v-col>
+                    <v-col cols="4" md="2">
+                      <v-text-field v-model="restaurant.location.zipCode" label="Code postal" :rules="rules"/>
                     </v-col>
                   </v-row>
                 </v-container>
                 <v-card-actions>
                   <v-spacer></v-spacer>
                   <v-btn @click="dialogs.restaurantDialog=false">Fermer</v-btn>
-                  <v-btn color="primary" class="mr-4" type="submit" @click="validateRestaurant" :disabled="!validForm.restaurant">Enregistrer</v-btn>
+                  <v-btn v-if="restaurant.error" color="primary" type="submit" class="mr-4" @click="createRestaurant" :disabled="!validForm.restaurant">Ajouter</v-btn>
+                  <v-btn v-else color="primary" class="mr-4" type="submit" @click="validateRestaurant" :disabled="!validForm.restaurant">Enregistrer</v-btn>
                 </v-card-actions>
               </v-form>
             </v-card>
@@ -70,15 +78,16 @@
         </h2>
       </v-col>
     </v-row>
-    <v-row v-if="!restaurantExist">
-      <h2>Pas de restaurant</h2>
+
+    <v-row v-if="restaurant.error">
+      <h3 class="ml-3">Veuillez entrer votre enseigne</h3>
     </v-row>
     <v-row v-else id="my-restaurant-view">
-      <v-col cols="12" md="3">
+      <v-col sm="12" md="4">
         <v-card elevation="2" outlined class="restaurant-cards mb-5">
           <v-row>
             <v-col cols="12" md="12">
-              <v-img :src="restaurant.image" :alt="restaurant.name" height="100%"/>
+              <v-img :src="restaurant.image" :alt="restaurant.name" height="100%" max-height="250px"/>
             </v-col>
             <v-col cols="12" md="12">
               <div class="restaurant-theme">
@@ -90,9 +99,8 @@
                 </div>
               </div>
               <v-card-subtitle class="text-justify">{{ restaurant.description }}</v-card-subtitle>
-              <div class="restaurant-infos">
-                <v-card-subtitle>{{ restaurant.location.city }} ({{ restaurant.location.zipCode }}), {{
-                  restaurant.location.address }}</v-card-subtitle>
+              <div class="restaurant-infos" v-if="restaurant.location">
+                <v-card-subtitle>{{ restaurant.location.city }} ({{ restaurant.location.zipCode }}), {{ restaurant.location.address }}</v-card-subtitle>
                 <div class="opening-hours">
                   <v-card-text>{{ restaurant.openingHours }}</v-card-text>
                 </div>
@@ -101,13 +109,15 @@
           </v-row>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="error" @click="deleteRestaurant">Supprimer
+            <v-btn color="error" @click="deleteRestaurant(restaurant)">
+              Supprimer
               <v-icon>mdi-delete</v-icon>
             </v-btn>
           </v-card-actions>
         </v-card>
       </v-col>
-      <v-col cols="12" md="9">
+
+      <v-col sm="12" md="8">
         <v-row>
           <v-col cols="12" md="12">
             <h3>Mes produits
@@ -125,19 +135,19 @@
                     <v-container>
                       <v-row>
                         <v-col cols="12" md="5">
-                          <v-text-field v-model="newProduct.name" label="Intitulé du produit"/>
+                          <v-text-field v-model="newProduct.name" label="Intitulé du produit" :rules="rules"/>
                         </v-col>
                         <v-col cols="12" md="12">
                           <v-textarea v-model="newProduct.description" label="Description du produit"/>
                         </v-col>
                         <v-col cols="12" md="4">
-                          <v-text-field v-model="newProduct.price" label="Prix du produit" type="number"/>
+                          <v-text-field v-model="newProduct.price" label="Prix du produit" type="number" :rules="rules"/>
                         </v-col>
                         <v-col cols="12" md="4">
-                          <v-text-field v-model="newProduct.categories" label="Categorie(s)" multiple/>
+                          <v-text-field v-model="newProduct.categories" label="Categorie(s)" hint="Catégorie 1, Catégorie 2" persistent-hint :rules="rules"/>
                         </v-col>
                         <v-col cols="8" md="8">
-                          <v-text-field v-model="newProduct.image" label="URL de l'image"/>
+                          <v-text-field v-model="newProduct.image" label="URL de l'image" :rules="rules"/>
                         </v-col>
                         <v-col cols="8" md="8">
                           <v-checkbox v-model="newProduct.isOutOfStock" label="Rupture de stock ?"/>
@@ -155,9 +165,9 @@
             </h3>
           </v-col>
           <v-col>
-            <v-row class="mt-5" v-for="category in getAllCategories" :key="category">
+            <v-row v-for="category in getAllCategories" :key="category">
               <v-col cols="12" md="12">
-                <ProductsComponent :products="products" :category="category" :modif="true"/>
+                <ProductsComponent :restaurant="restaurant" :products="products" :category="category" :modif="true"/>
               </v-col>
             </v-row>
           </v-col>
@@ -179,16 +189,16 @@
                     <v-container>
                       <v-row>
                         <v-col cols="12" md="5">
-                          <v-text-field v-model="newMenu.name" label="Intitulé du menu"/>
+                          <v-text-field v-model="newMenu.name" label="Intitulé du menu" :rules="rules"/>
                         </v-col>
                         <v-col cols="12" md="12">
                           <v-textarea v-model="newMenu.description" label="Description du menu"/>
                         </v-col>
                         <v-col cols="12" md="4">
-                          <v-text-field v-model="newMenu.price" label="Prix du menu" type="number"/>
+                          <v-text-field v-model="newMenu.price" label="Prix du menu" type="number" :rules="rules"/>
                         </v-col>
                         <v-col cols="8" md="8">
-                          <v-text-field v-model="newMenu.image" label="URL de l'image"/>
+                          <v-text-field v-model="newMenu.image" label="URL de l'image" :rules="rules"/>
                         </v-col>
                         <v-col cols="8" md="4">
                           <v-select v-model="newMenu.products" :items="getAllProducts" label="Produits" multiple/>
@@ -207,7 +217,7 @@
           </v-col>
           <v-col>
             <v-col cols="12" md="12">
-              <MenusComponent :menus="menus" :productsList="getAllProducts" :modif="true"/>
+              <MenusComponent :restaurant="restaurant" :menus="menus" :modif="true"/>
             </v-col>
           </v-col>
         </v-row>
@@ -219,8 +229,8 @@
 <script>
 import ProductsComponent from '@/components/shop/ProductsComponent.vue'
 import MenusComponent from '@/components/shop/MenusComponent.vue'
-import $storeUser from '@/store/user'
 import axios from 'axios'
+import $storeUser from '@/store/user'
 
 export default {
   name: 'MyRestaurantView',
@@ -229,8 +239,9 @@ export default {
     MenusComponent
   },
   data: () => ({
-    userStore: $storeUser.state.user,
+    user: $storeUser.state.user,
     restaurant: {},
+    restaurants: [],
     products: [],
     newProduct: {
       name: '',
@@ -259,11 +270,35 @@ export default {
       newProduct: false,
       newMenu: false
     },
-    rules: {}
+    rules: [
+      v => !!v || 'Veuillez renseigner ce champs'
+    ]
   }),
   methods: {
+    createRestaurant () {
+      const restaurant = {
+        name: this.restaurant.name,
+        description: this.restaurant.description,
+        image: this.restaurant.image,
+        categories: this.restaurant.categories.split(','),
+        restaurantOwnerId: this.user.id,
+        openingHours: this.restaurant.openingHours,
+        location: {
+          city: this.restaurant.city,
+          zipCode: this.restaurant.zipCode,
+          address: this.restaurant.address,
+          latitude: 0,
+          longitude: 0
+        }
+      }
+
+      axios.post('http://localhost:4200/api/v1/restaurants/', restaurant)
+        .catch(error => console.log(error))
+    },
     validateRestaurant () {
-      return false
+      this.restaurant.categories = this.restaurant.categories.toString().split(',')
+      axios.patch('http://localhost:4200/api/v1/restaurants/' + this.restaurant._id, this.restaurant)
+        .catch(error => console.log(error))
     },
     validateRestaurantSubmit () {
       if (this.validForm.restaurant) {
@@ -272,7 +307,18 @@ export default {
       }
     },
     validateNewProduct () {
-      return false
+      const product = {
+        name: this.newProduct.name,
+        description: this.newProduct.description,
+        restaurantId: this.restaurant._id,
+        price: this.newProduct.price,
+        image: this.newProduct.image,
+        categories: this.newProduct.categories.split(','),
+        isOutOfStock: false
+      }
+
+      axios.post('http://localhost:4500/api/v1/products/', product)
+        .catch(error => console.log(error))
     },
     validateNewProductSubmit () {
       if (this.validForm.newProduct) {
@@ -281,7 +327,23 @@ export default {
       }
     },
     validateNewMenu () {
-      return false
+      const products = []
+      for (let i = 0; i < this.newMenu.products.length; i++) {
+        const product = this.products.find(product => product.name === this.newMenu.products[i])
+        products.push(product._id)
+      }
+
+      const menu = {
+        name: this.newMenu.name,
+        description: this.newMenu.description,
+        products: products,
+        restaurantId: this.restaurant._id,
+        price: this.newMenu.price,
+        image: this.newMenu.image
+      }
+
+      axios.post('http://localhost:4600/api/v1/menus/', menu)
+        .catch(error => console.log(error))
     },
     validateNewMenuSubmit () {
       if (this.validForm.newMenu) {
@@ -289,18 +351,21 @@ export default {
         this.dialogs.restaurantDialog = false
       }
     },
-    deleteRestaurant () {
-      return null
+    deleteRestaurant (item) {
+      axios.delete('http://localhost:4200/api/v1/restaurants/' + item._id)
+        .catch(error => console.log(error))
+      location.reload()
     }
   },
   computed: {
     getAllCategories () {
       const categories = []
-      for (let i = 0; i < this.products.length; i++) {
-        const productCategories = this.products[i].categories
-        for (let j = 0; j < productCategories.length; j++) {
-          if (!categories.includes(productCategories[j])) {
-            categories.push(productCategories[j])
+      const restaurantProducts = this.products.filter(product => product.restaurantId === this.restaurant._id)
+      for (let i = 0; i < restaurantProducts.length; i++) {
+        const restaurantProductsCategory = restaurantProducts[i].categories
+        for (let j = 0; j < restaurantProductsCategory.length; j++) {
+          if (!categories.includes(restaurantProductsCategory[j])) {
+            categories.push(restaurantProductsCategory[j])
           }
         }
       }
@@ -308,14 +373,28 @@ export default {
     },
     getAllProducts () {
       const productsList = []
-      for (let i = 0; i < this.products.length; i++) {
+      for (let i = 0; i < this.products.filter(product => product.restaurantId === this.restaurant._id).length; i++) {
         const productCategories = this.products[i].name
-        if (!productsList.includes(productCategories[i])) {
+        if (!productsList.includes(productCategories)) {
           productsList.push(productCategories)
         }
       }
       return productsList
     }
+  },
+  mounted () {
+    axios.get('http://localhost:4200/api/v1/restaurants/byowner/' + this.user.id)
+      .then(response => (this.restaurant = response.data))
+      .catch(error => console.log(error))
+    axios.get('http://localhost:4200/api/v1/restaurants')
+      .then(response => (this.restaurants = response.data))
+      .catch(error => console.log(error))
+    axios.get('http://localhost:4500/api/v1/products/')
+      .then(response => (this.products = response.data))
+      .catch(error => console.log(error))
+    axios.get('http://localhost:4600/api/v1/menus/')
+      .then(response => (this.menus = response.data))
+      .catch(error => console.log(error))
   }
 }
 </script>

@@ -11,7 +11,7 @@
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn @click="cancelButtonClick">Fermer</v-btn>
-            <v-btn class="mr-4" color="primary" type="submit" @click="validateOrder" :disabled="!validOrder">Valider</v-btn>
+            <v-btn class="mr-4" color="primary" @click="validateOrder" :disabled="!validOrder">Valider</v-btn>
           </v-card-actions>
         </v-form>
       </v-card>
@@ -20,6 +20,7 @@
 
 <script>
 import axios from 'axios'
+import $storeUser from '@/store/user'
 
 export default {
   name: 'ValidateOrderComponent',
@@ -27,6 +28,8 @@ export default {
     order: {}
   },
   data: () => ({
+    user: $storeUser.state.user,
+    deliveryMan: [],
     validOrder: false,
     validateOrderDialog: false,
     show1: true
@@ -41,8 +44,8 @@ export default {
         restaurant: this.order.restaurant,
         date: Date.now(),
         deliveryState: 'En attente de livraison',
-        deliveryManId: '2',
-        customerId: '0',
+        deliveryManId: this.deliveryMan.id,
+        customerId: this.order.customerId,
         location: {
           city: this.order.location.city,
           zipCode: this.order.location.zipCode,
@@ -67,6 +70,11 @@ export default {
         this.validateOrderDialog = false
       }
     }
+  },
+  mounted () {
+    axios.get('http://localhost:4300/api/v1/deliveries/deliveryman/')
+      .then(response => (this.deliveryMan = response.data))
+      .catch(error => console.log(error))
   }
 }
 </script>

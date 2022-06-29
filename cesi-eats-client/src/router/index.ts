@@ -152,7 +152,7 @@ function cartGuard (to, from, next) {
   next('/')
 }
 function orderGuard (to, from, next) {
-  if ($storeUser.state.user?.roleId === 1) return next()
+  if ($storeUser.state.user?.roleId === 1 || $storeUser.state.user?.roleId === 2) return next()
   next('/')
 }
 function deliveryGuard (to, from, next) {
