@@ -11,6 +11,12 @@
                 dossier composants
               </a>
               dans le répertoire GitHub. Ou bien télécharger directement le ou les composants que vous souhaitez sur cette page contenant les principaux.
+              <br>
+              Concernant les APIs utilsées par notre application, vous pouvez consulter la
+              <a href="" target="_blank" title="Documentation">
+                documentation
+              </a>
+              correspondante.
             </v-card-subtitle>
           </v-card>
         </v-col>
