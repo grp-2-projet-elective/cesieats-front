@@ -38,7 +38,7 @@
                     </v-text-field>
                   </v-col>
                   <v-col cols="12" md="12">
-                    <v-text-field v-model="user.thumbnail" :rules="thumbnail" label="URL de la photo de profil*">
+                    <v-text-field v-model="user.thumbnail" :rules="thumbnail" label="URL de la photo de profil*" :counter="255">
                     </v-text-field>
                   </v-col>
                 </v-row>
@@ -69,7 +69,7 @@
                   <v-icon>mdi-delete</v-icon>
                   Supprimer
                 </v-btn>
-                <v-btn color="primary" class="mr-4" type="submit" @click="updateProfile" :disabled="!validProfile">
+                <v-btn color="primary" class="mr-4" type="submit" :disabled="!validProfile">
                   Enregistrer
                 </v-btn>
               </v-card-actions>
@@ -122,7 +122,7 @@
                   <v-btn @click="closeMdpDialog">
                     Fermer
                   </v-btn>
-                  <v-btn color="primary" class="mr-4" type="submit" @click="updatePwd" :disabled="!validPwd">
+                  <v-btn color="primary" class="mr-4" type="submit" :disabled="!validPwd">
                     Enregistrer
                   </v-btn>
                 </v-card-actions>
@@ -160,7 +160,7 @@
                   <v-btn @click="closeSponsorDialog">
                     Fermer
                   </v-btn>
-                  <v-btn color="primary" class="mr-4" type="submit" @click="updateSponsor" :disabled="!validSponsor">
+                  <v-btn color="primary" class="mr-4" type="submit" :disabled="!validSponsor">
                     Enregistrer
                   </v-btn>
                 </v-card-actions>
