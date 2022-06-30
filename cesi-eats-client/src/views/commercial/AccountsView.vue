@@ -183,6 +183,13 @@ export default {
       axios.delete('http://localhost:4100/api/v1/users/' + this.editedUser.id)
         .catch(error => console.log(error))
       this.closeDelete()
+
+      axios.post('http://localhost:4000/api/v1/auth/logout', { id: this.editedUser.id })
+        .then(() => {
+          window.localStorage.clear()
+          location.reload()
+        })
+        .catch(error => console.log(error))
     },
     close () {
       this.dialog = false
