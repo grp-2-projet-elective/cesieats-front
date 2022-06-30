@@ -79,14 +79,13 @@ export default Vue.extend({
           break
         case 5:
           viewsAvailable = [
-            { isSetting: true, view: 'Logs', link: '/logs', mdi: 'mdi-archive-arrow-up' },
-            { isSetting: true, view: 'Composants', link: '/composants', mdi: 'mdi-archive-arrow-up' }
+            { isSetting: false, view: 'Logs', link: '/logs', mdi: 'mdi-archive-arrow-up' },
+            { isSetting: false, view: 'Composants', link: '/composants', mdi: 'mdi-archive-arrow-up' }
           ]
           break
         case 6:
           viewsAvailable = [
-            { isSetting: true, view: 'Documentation', link: '/documentation', mdi: 'mdi-file-document-multiple' },
-            { isSetting: true, view: 'Composants', link: '/composants', mdi: 'mdi-archive-arrow-up' }
+            { isSetting: false, view: 'Composants', link: '/composants', mdi: 'mdi-archive-arrow-up' }
           ]
           break
         default:

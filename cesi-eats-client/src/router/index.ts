@@ -14,7 +14,8 @@ import OrdersView from '../views/shop/OrdersView.vue'
 import DeliveriesView from '../views/shop/DeliveriesView.vue'
 import AccountsView from '../views/commercial/AccountsView.vue'
 import StatisticsView from '../views/commercial/StatisticsView.vue'
-import ComponentsView from '../views/ComponentsView.vue'
+import ComponentsView from '../views/technical/ComponentsView.vue'
+import LogsView from '../views/technical/LogsView.vue'
 import HelpView from '../views/HelpView.vue'
 import LegalNoticeView from '../views/mandatory/LegalNoticeView.vue'
 import TOUView from '../views/mandatory/TOUView.vue'
@@ -114,6 +115,12 @@ const routes: Array<RouteConfig> = [
     beforeEnter: componentsGuard
   },
   {
+    path: '/logs',
+    name: 'logs',
+    component: LogsView,
+    beforeEnter: logsGuard
+  },
+  {
     path: '/aide',
     name: 'aide',
     component: HelpView
@@ -174,6 +181,10 @@ function deliveryGuard (to, from, next) {
 }
 function componentsGuard (to, from, next) {
   if ($storeUser.state.user?.roleId === 5 || $storeUser.state.user?.roleId === 6) return next()
+  next('/')
+}
+function logsGuard (to, from, next) {
+  if ($storeUser.state.user?.roleId === 5) return next()
   next('/')
 }
 function accountsGuard (to, from, next) {

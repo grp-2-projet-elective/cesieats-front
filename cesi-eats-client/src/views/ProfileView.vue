@@ -266,6 +266,13 @@ export default {
       axios.delete('http://localhost:4100/api/v1/users/' + this.user.id)
         .catch(error => console.log(error))
       this.dialog = false
+
+      axios.post('http://localhost:4000/api/v1/auth/logout', { id: this.user.id })
+        .then(() => {
+          window.localStorage.clear()
+          location.reload()
+        })
+        .catch(error => console.log(error))
     },
     updatePwd () {
       axios.patch('http://localhost:4100/api/v1/users/updatePassword/' + this.user.id, { password: this.newPassword })
