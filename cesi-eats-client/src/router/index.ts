@@ -20,6 +20,7 @@ import GTCView from '../views/mandatory/GTCView.vue'
 import PrivacyPolicyView from '../views/mandatory/PrivacyPolicyView.vue'
 import ProfileView from '../views/ProfileView.vue'
 import AccountsView from '../views/commercial/AccountsView.vue'
+import DashboardView from '../views/DashboardView.vue'
 
 import $storeUser from '@/store/user'
 
@@ -128,6 +129,11 @@ const routes: Array<RouteConfig> = [
     path: '/comptes',
     name: 'clientsAccounts',
     component: AccountsView
+  },
+  {
+    path: '/',
+    name: 'dashboard',
+    component: DashboardView
   }
 ]
 
