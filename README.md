@@ -15,7 +15,7 @@ Chaque service dispose de ces propres fonctionnalités.
 # Installation 
 
 1) Cloner le projet dans un repository 
-2) Rentrer la commande : npm i 
+2) Rentrer la commande : *npm i* 
 3) Vérifier vos dépendances 
 
 
