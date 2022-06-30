@@ -6,7 +6,7 @@
       <v-text-field v-model="search" append-icon="mdi-magnify" label="Nom de l'utilisateur" single-line hide-details>
       </v-text-field>
     </v-card-title>
-    <v-data-table id="users-management" :headers="headers" :items="users" :search="search" sort-by="lastname">
+    <v-data-table :headers="headers" :items="users" :search="search" sort-by="lastname">
       <template v-slot:top>
         <v-divider class="mx-4" inset vertical></v-divider>
         <v-spacer></v-spacer>
@@ -225,9 +225,7 @@ export default {
   },
   mounted () {
     axios.get('http://localhost:4100/api/v1/users/')
-      .then(response => {
-        this.users = response.data
-      })
+      .then(response => { this.users = response.data })
       .catch(error => console.log(error))
   },
   watch: {
