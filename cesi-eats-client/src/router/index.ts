@@ -148,7 +148,7 @@ const routes: Array<RouteConfig> = [
 ]
 
 function registerGuard (to, from, next) {
-  if ($storeUser.state.user.roleId) return next()
+  if (!$storeUser.state.user.roleId) return next()
   next('/')
 }
 function profileGuard (to, from, next) {
