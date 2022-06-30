@@ -1,4 +1,14 @@
 <template>
+  <v-app id="inspire">
+    <Sidebar :drawer="drawer" />
+    <Topbar @drawerEvent="drawer = !drawer" />
+    <MenuComponent style="z-index: 20;" :views-available="viewsAvailable"/>
+    <v-main>
+      <NavbarComponent style="z-index: 10;" :views-available="viewsAvailable"/>
+      <router-view/>
+    </v-main>
+    <FooterComponent style="z-index: 30;"/>
+  </v-app>
   <v-app>
     <MenuComponent style="z-index: 20;" :views-available="viewsAvailable"/>
     <v-main>
@@ -15,16 +25,22 @@ import MenuComponent from '@/components/MenuComponent.vue'
 import NavbarComponent from '@/components/NavbarComponent.vue'
 import FooterComponent from '@/components/FooterComponent.vue'
 import $storeUser from '@/store/user'
+import Sidebar from "./components/Sidebar";
+import Topbar from "./components/Topbar";
 
 export default Vue.extend({
   name: 'App',
   components: {
     MenuComponent,
     NavbarComponent,
-    FooterComponent
+    FooterComponent,
+    Topbar,
+    Sidebar
   },
   data: () => ({
-    user: $storeUser.state.user
+    user: $storeUser.state.user,
+    cards: ["Today", "Yesterday"],
+    drawer: null,
   }),
   computed: {
     viewsAvailable () {
