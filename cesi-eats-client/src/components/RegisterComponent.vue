@@ -6,8 +6,11 @@
     <v-form v-model="isValid" ref="registerForm" @submit.prevent="registerSubmit">
       <v-container>
         <v-row>
-          <v-col cols="4" md="2">
+          <v-col cols="4" md="2" class="mr-10">
             <v-select v-model="user.role" :items="roles" :rules="roleRules" label="Rôle*" required></v-select>
+          </v-col>
+          <v-col cols="4" md="2">
+            <v-text-field v-model="user.sponsorReferal" :rules="sponsor" label="Code de parrainage" :error-messages="checkSponsorRole()"></v-text-field>
           </v-col>
         </v-row>
         <v-card-title>
@@ -114,6 +117,10 @@ export default {
     thumbnail: [
       v => !!v || 'Veuillez entrer une URL'
     ],
+    sponsor: [
+      v => /(([1-6]{1})+-([0-9A-Z]{3})+-([0-9A-Z]{3})$)|^$/.test(v) || 'Format incorrect'
+    ],
+    users: [],
     user: {
       mail: '',
       pwd: '',
@@ -124,8 +131,10 @@ export default {
       firstName: '',
       lastName: '',
       phone: '',
-      thumbnail: ''
+      thumbnail: '',
+      sponsorReferal: ''
     },
+    sponsorID: null,
     show1: false,
     roles: [
       'Client',
@@ -140,10 +149,14 @@ export default {
   methods: {
     registerSubmit () {
       this.snackbar = false
-      if (this.user.mail === '' || this.user.pwd === '' || (this.user.role === '' || this.user.role === null) || this.user.city === '' || this.user.zipCode === '' || this.user.address === '' || this.user.firstName === '' || this.user.lastName === '' || this.user.phone === '' || this.user.thumbnail === '') {
+      console.log(this.checkSponsorRole())
+      console.log(this.checkSponsorRole(this.sponsorID))
+      if (this.checkSponsorRole() !== '' || this.user.mail === '' || this.user.pwd === '' || (this.user.role === '' || this.user.role === null) || this.user.city === '' || this.user.zipCode === '' || this.user.address === '' || this.user.firstName === '' || this.user.lastName === '' || this.user.phone === '' || this.user.thumbnail === '') {
         console.log('Please, specify all informations')
         return
       }
+      this.getSponsorId()
+      console.log(this.getSponsorId())
       this.validate()
     },
     validate () {
@@ -162,7 +175,8 @@ export default {
         phone: this.user.phone,
         password: this.user.pwd,
         thumbnail: this.user.thumbnail,
-        roleId: roleId
+        roleId: roleId,
+        sponsorId: this.sponsorID ? this.sponsorID : ''
       }
 
       axios.post('http://localhost:4000/api/v1/auth/register', requestBody).then((response, error) => {
@@ -186,7 +200,47 @@ export default {
     },
     defineTokens (tokens) {
       this.$store.commit('defineTokens', tokens)
+    },
+    getSponsorId () {
+      const user = this.users.find(user => user.referalCode === this.user.sponsorReferal)
+      this.sponsorID = user?.id
+    },
+    doReferalExist () {
+      const sponsor = this.users.find(user => user.referalCode === this.user.sponsorReferal)
+      console.log(sponsor)
+      if (sponsor == null) {
+        return false
+      } return true
+    },
+    checkSponsorRole () {
+      let error = ''
+      console.log(this.user?.sponsorReferal)
+      if (this.user.sponsorReferal === '') {
+        error = ''
+      } else {
+        let roleId = 0
+        const sponsorRole = Number(this.user?.sponsorReferal?.split('-')[0])
+        if (this.user.role === 'Client') roleId = 1
+        if (this.user.role === 'Restaurateur') roleId = 2
+        if (this.user.role === 'Livreur') roleId = 3
+        if (roleId === sponsorRole && this.doReferalExist()) {
+          error = ''
+        } else if (!this.doReferalExist()) {
+          error = 'Ce code n\'existe pas'
+        } else {
+          error = 'Votre rôle et celui du parrain ne correspondent pas'
+        }
+      }
+      console.log(error)
+      return error
     }
+  },
+  mounted () {
+    axios.get('http://localhost:4100/api/v1/users/')
+      .then(response => {
+        this.users = response.data
+      })
+      .catch(error => console.log(error))
   }
 }
 </script>
