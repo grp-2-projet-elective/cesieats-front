@@ -12,6 +12,8 @@ import ProductsView from '../views/shop/ProductsView.vue'
 import CartView from '../views/shop/CartView.vue'
 import OrdersView from '../views/shop/OrdersView.vue'
 import DeliveriesView from '../views/shop/DeliveriesView.vue'
+import AccountsView from '../views/commercial/AccountsView.vue'
+import StatisticsView from '../views/commercial/StatisticsView.vue'
 import ComponentsView from '../views/ComponentsView.vue'
 import HelpView from '../views/HelpView.vue'
 import LegalNoticeView from '../views/mandatory/LegalNoticeView.vue'
@@ -19,8 +21,6 @@ import TOUView from '../views/mandatory/TOUView.vue'
 import GTCView from '../views/mandatory/GTCView.vue'
 import PrivacyPolicyView from '../views/mandatory/PrivacyPolicyView.vue'
 import ProfileView from '../views/ProfileView.vue'
-import AccountsView from '../views/commercial/AccountsView.vue'
-import DashboardView from '../views/DashboardView.vue'
 
 import $storeUser from '@/store/user'
 
@@ -35,7 +35,8 @@ const routes: Array<RouteConfig> = [
   {
     path: '/inscription',
     name: 'inscription',
-    component: RegisterView
+    component: RegisterView,
+    beforeEnter: registerGuard
   },
   {
     path: '/profil',
@@ -95,6 +96,18 @@ const routes: Array<RouteConfig> = [
     beforeEnter: deliveryGuard
   },
   {
+    path: '/comptes',
+    name: 'comptes',
+    component: AccountsView,
+    beforeEnter: accountsGuard
+  },
+  {
+    path: '/statistiques',
+    name: 'statistiques',
+    component: StatisticsView,
+    beforeEnter: statisticsGuard
+  },
+  {
     path: '/composants',
     name: 'composants',
     component: ComponentsView,
@@ -124,19 +137,13 @@ const routes: Array<RouteConfig> = [
     path: '/politique-confidentialite',
     name: 'politique-confidentialite',
     component: PrivacyPolicyView
-  },
-  {
-    path: '/comptes',
-    name: 'clientsAccounts',
-    component: AccountsView
-  },
-  {
-    path: '/',
-    name: 'dashboard',
-    component: DashboardView
   }
 ]
 
+function registerGuard (to, from, next) {
+  if ($storeUser.state.user.roleId) return next()
+  next('/')
+}
 function profileGuard (to, from, next) {
   if ($storeUser.state.user.roleId) return next()
   next('/')
@@ -167,6 +174,14 @@ function deliveryGuard (to, from, next) {
 }
 function componentsGuard (to, from, next) {
   if ($storeUser.state.user?.roleId === 5 || $storeUser.state.user?.roleId === 6) return next()
+  next('/')
+}
+function accountsGuard (to, from, next) {
+  if ($storeUser.state.user?.roleId === 4 || $storeUser.state.user?.roleId === 6) return next()
+  next('/')
+}
+function statisticsGuard (to, from, next) {
+  if ($storeUser.state.user?.roleId === 4 || $storeUser.state.user?.roleId === 6) return next()
   next('/')
 }
 

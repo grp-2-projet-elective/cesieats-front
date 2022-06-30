@@ -20,7 +20,6 @@
         <span class="mr-1">{{ view.view }}</span>
       </v-btn>
     </div>
-
     <div v-if="viewsAvailable[0].view !== 'Connexion'">
       <v-btn class="reponsive-navbar" link v-for="view in viewsAvailable.filter(view => !view.isSetting)" :key="view.view" :to="view.link">
         <v-icon v-if="view.mdi" class="mr-1">{{ view.mdi }}</v-icon>
@@ -46,6 +45,14 @@
             </v-btn>
           </v-list-item>
           <v-list-item>
+            <v-btn @click="logout" style="width: 100%; background: none;box-shadow: none;border-bottom: 1px solid black;border-radius: 0;">
+              <v-list-item-title>
+                <v-icon class="mr-1">mdi-logout</v-icon>
+                <span class="mr-1">Déconnexion</span>
+              </v-list-item-title>
+            </v-btn>
+          </v-list-item>
+          <v-list-item>
             <v-checkbox v-model="$vuetify.theme.dark"
               class="pt-4 ma-auto"
               on-icon="mdi-theme-light-dark"
@@ -61,7 +68,9 @@
 
 <script>
 import LoginComponent from '@/components/LoginComponent'
-import $store from '@/store/cart'
+import $storeCart from '@/store/cart'
+import $storeUser from '@/store/user'
+import axios from 'axios'
 
 export default {
   name: 'NavbarComponent',
@@ -72,8 +81,19 @@ export default {
     viewsAvailable: Array
   },
   data: () => ({
-    cart: $store.state.cart
+    cart: $storeCart.state.cart,
+    user: $storeUser.state.user
   }),
+  methods: {
+    logout () {
+      axios.post('http://localhost:4000/api/v1/auth/logout', { id: this.user.id })
+        .then(() => {
+          window.localStorage.clear()
+          location.reload()
+        })
+        .catch(error => console.log(error))
+    }
+  },
   computed: {
     totalQuantity () {
       let totalQuantity = 0

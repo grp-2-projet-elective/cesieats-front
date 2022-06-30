@@ -6,7 +6,7 @@
       <v-text-field v-model="search" append-icon="mdi-magnify" label="Nom de l'utilisateur" single-line hide-details>
       </v-text-field>
     </v-card-title>
-    <v-data-table :headers="headers" :items="users" :search="search" sort-by="lastname">
+    <v-data-table id="users-management" :headers="headers" :items="users" :search="search" sort-by="lastname">
       <template v-slot:top>
         <v-divider class="mx-4" inset vertical></v-divider>
         <v-spacer></v-spacer>
@@ -92,11 +92,6 @@
           mdi-delete
         </v-icon>
       </template>
-      <template v-slot:no-data>
-        <v-btn color="primary" @click="initialize">
-          Reset
-        </v-btn>
-      </template>
     </v-data-table>
   </v-card>
 </template>
@@ -122,7 +117,7 @@ export default {
       city: '',
       address: '',
       zipCode: '',
-      suspended: null
+      isSuspended: null
     },
     headers: [
       { text: 'Nom', align: 'start', sortable: true, value: 'lastname' },
@@ -133,8 +128,8 @@ export default {
       { text: 'Ville', value: 'city' },
       { text: 'Adresse', value: 'address' },
       { text: 'Code postal', value: 'zipCode' },
-      { text: 'Création du compte', value: 'createdAt' }, /*
-      { text: 'Suspendu', value: 'suspended' }, */
+      { text: 'Création du compte', value: 'createdAt' },
+      { text: 'Suspendu', value: 'isSuspended' },
       { text: 'Actions', value: 'actions', sortable: false }
     ],
     firstNameRules: [
@@ -217,14 +212,15 @@ export default {
     suspendUser (item) {
       this.editedIndex = this.users.indexOf(item)
       this.editedUser = Object.assign({}, item)
-      if (this.editedUser.suspended === true) {
-        axios.patch('http://localhost:4100/api/v1/users/' + this.editedUser.id, { suspended: false })
+      if (this.editedUser.isSuspended === true) {
+        axios.patch('http://localhost:4100/api/v1/users/' + this.editedUser.id, { isSuspended: false })
           .catch(error => console.log(error))
       } else {
-        axios.patch('http://localhost:4100/api/v1/users/' + this.editedUser.id, { suspended: true })
+        axios.patch('http://localhost:4100/api/v1/users/' + this.editedUser.id, { isSuspended: true })
           .catch(error => console.log(error))
       }
       this.editedIndex = -1
+      location.reload()
     }
   },
   mounted () {

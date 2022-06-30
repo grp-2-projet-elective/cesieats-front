@@ -12,7 +12,8 @@
         <v-list dense class="py-0">
           <v-list-item two-line :class="miniVariant && 'px-0'">
             <v-list-item-avatar class="ml-2">
-              <img :src="user.thumbnail" alt="Avatar">
+              <img v-if="user.thumbnail !== null" :src="user.thumbnail" alt="Avatar" />
+              <img v-else src="https://icones.pro/wp-content/uploads/2021/02/icone-utilisateur.png" />
             </v-list-item-avatar>
             <v-list-item-content>
               <v-list-item-title>{{user.firstname}} {{user.lastname}}</v-list-item-title>
@@ -20,13 +21,17 @@
             </v-list-item-content>
           </v-list-item>
 
-          <v-btn link v-for="view in viewsAvailable" :key="view.view" :to="view.link">
+          <v-btn link v-for="(view, idx) in viewsAvailable" :key="idx" :to="view.link">
             <v-list-item link style="width: 223px;padding-left: 2px;">
                 <v-icon class="mr-5">{{ view.mdi }}</v-icon>
                 {{ view.view }}
                 <v-badge class="ml-1" v-if="view.view === 'Panier' && totalQuantity > 0" color="primary" :content="totalQuantity"></v-badge>
             </v-list-item>
           </v-btn>
+          <v-list-item class="ml-4" link @click="logout" style="width: 223px;padding-left: 2px;">
+            <v-icon class="mr-5">mdi-logout</v-icon>
+            <span style="font-size: 14px;">DECONNEXION</span>
+          </v-list-item>
           <v-list-item>
             <v-checkbox v-model="$vuetify.theme.dark"
               class="ml-1"
@@ -44,6 +49,7 @@
 <script>
 import $storeCart from '@/store/cart'
 import $storeUser from '@/store/user'
+import axios from 'axios'
 
 export default {
   props: {
@@ -57,6 +63,16 @@ export default {
     cart: $storeCart.state.cart,
     user: $storeUser.state.user
   }),
+  methods: {
+    logout () {
+      axios.post('http://localhost:4000/api/v1/auth/logout', { id: this.user.id })
+        .then(() => {
+          window.localStorage.clear()
+          location.reload()
+        })
+        .catch(error => console.log(error))
+    }
+  },
   computed: {
     totalQuantity () {
       let totalQuantity = 0
