@@ -64,8 +64,8 @@ export default Vue.extend({
         case 4:
           viewsAvailable = [
             { isSetting: false, view: 'Comptes', link: '/comptes', mdi: 'mdi-account-multiple' },
-            { isSetting: true, view: 'Profil', link: '/profil', mdi: 'mdi-account-wrench' },
-            { isSetting: true, view: 'Statistiques', link: '/statistiques', mdi: 'mdi-chart-line' }
+            { isSetting: false, view: 'Statistiques', link: '/statistiques', mdi: 'mdi-chart-line' },
+            { isSetting: true, view: 'Profil', link: '/profil', mdi: 'mdi-account-wrench' }
           ]
           break
         case 5:
