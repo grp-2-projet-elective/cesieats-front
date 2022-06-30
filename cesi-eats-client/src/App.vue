@@ -6,6 +6,13 @@
       <router-view/>
     </v-main>
     <FooterComponent style="z-index: 30;"/>
+    <vue-cookies-consent style="z-index: 40" :backgroundWindow="this.$vuetify.theme.currentTheme.warning" save-method="cookies">
+    <template #title>Ce site utilise des cookies</template>
+    <template #description>
+      <p>En continuant votre navigation sur ce site, vous acceptez l'utilisation de cookies</p>
+    </template>
+    <template #button>J'accepte</template>
+  </vue-cookies-consent>
   </v-app>
 </template>
 
@@ -15,6 +22,7 @@ import MenuComponent from '@/components/MenuComponent.vue'
 import NavbarComponent from '@/components/NavbarComponent.vue'
 import FooterComponent from '@/components/FooterComponent.vue'
 import $storeUser from '@/store/user'
+import VueCookiesConsent from '@norvikit/vue-cookies-consent'
 import axios from 'axios'
 
 axios.interceptors.request.use(function (config) {
@@ -31,7 +39,8 @@ export default Vue.extend({
   components: {
     MenuComponent,
     NavbarComponent,
-    FooterComponent
+    FooterComponent,
+    VueCookiesConsent
   },
   data: () => ({
     user: $storeUser.state.user
